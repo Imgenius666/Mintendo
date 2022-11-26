@@ -215,7 +215,7 @@ public class TetrisView {
                         model.modelTick(TetrisModel.MoveType.ROTATE);
                         break;
                     case S:
-                        model.modelTick(TetrisModel.MoveType.DOWN);
+                        model.modelTick(TetrisModel.MoveType.DROP);
                         break;
                 }
             }
