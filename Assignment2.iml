@@ -24,6 +24,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="javafx.graphics" level="application" />
+<<<<<<< HEAD
     <orderEntry type="library" name="lib" level="application" />
     <orderEntry type="module-library">
       <library name="JUnit5.8.1">
@@ -41,5 +42,8 @@
         <SOURCES />
       </library>
     </orderEntry>
+=======
+    <orderEntry type="library" name="javafx.base" level="project" />
+>>>>>>> d3f68ec7796f0ca1b51b0316d74a741a8b8f6034
   </component>
 </module>
