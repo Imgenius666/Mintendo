@@ -20,6 +20,7 @@ import javafx.util.Duration;
 import model.TetrisModel;
 
 
+
 /**
  * Tetris View
  *
@@ -30,7 +31,7 @@ public class TetrisView {
     TetrisModel model; //reference to model
     Stage stage;
 
-    Button startButton, stopButton, loadButton, saveButton, newButton; //buttons for functions
+    Button startButton, stopButton, loadButton, saveButton, newButton, ChangeColorModeButton, GameInstructionButton; //buttons for functions
     Label scoreLabel = new Label("");
     Label gameModeLabel = new Label("");
 
@@ -134,7 +135,20 @@ public class TetrisView {
         newButton.setFont(new Font(12));
         newButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
 
-        HBox controls = new HBox(20, saveButton, loadButton, newButton, startButton, stopButton);
+        ChangeColorModeButton = new Button("Change Color Mode");
+        ChangeColorModeButton.setId("ChangeColorMode");
+        ChangeColorModeButton.setPrefSize(200, 50);
+        ChangeColorModeButton.setFont(new Font(12));
+        ChangeColorModeButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
+
+        GameInstructionButton = new Button("Game Instruction");
+        GameInstructionButton.setId("Game Instruction");
+        GameInstructionButton.setPrefSize(200, 50);
+        GameInstructionButton.setFont(new Font(12));
+        GameInstructionButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
+
+        HBox controls = new HBox(20, saveButton, loadButton, newButton, startButton, stopButton,
+                ChangeColorModeButton, GameInstructionButton);
         controls.setPadding(new Insets(20, 20, 20, 20));
         controls.setAlignment(Pos.CENTER);
 
@@ -185,6 +199,14 @@ public class TetrisView {
         //Make sure to return the focus to the borderPane once you're done!
         loadButton.setOnAction(e -> {
             createLoadView();
+        });
+
+        ChangeColorModeButton.setOnAction(e -> {
+            ChangeColorMode();
+        });
+
+        GameInstructionButton.setOnAction(e -> {
+            GameInstruciton();
         });
 
         //configure this such that you adjust the speed of the timeline to a value that
@@ -336,5 +358,15 @@ public class TetrisView {
         LoadView loadView = new LoadView(this);
     }
 
+    private void ChangeColorMode(){
+        ChangeColorMode changeColorMode = new ChangeColorMode(this.model, this.stage, this);
+    }
 
+    private void GameInstruciton(){
+
+    }
+
+    public double getWidth(){return this.width;}
+    public double getHeight(){return this.height;}
 }
+
