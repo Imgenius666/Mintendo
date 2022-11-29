@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TetrisView">
+   <top>
+      <HBox fx:id="controls" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#createSaveView" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Save" />
+            <Button fx:id="loadButton" mnemonicParsing="false" onAction="#createLoadView" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Load" />
+            <Button fx:id="newButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="New Game" />
+            <Button fx:id="startButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Start" />
+            <Button fx:id="stopButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Stop" />
+         </children>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </HBox>
+   </top>
+   <center>
+      <Canvas fx:id="canvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <VBox fx:id="vBox" prefHeight="15.0" prefWidth="800.0" spacing="20.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Slider fx:id="slider" showTickLabels="true" style="-fx-control-inner-background: palegreen;" value="50.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </bottom>
+   <right>
+      <VBox fx:id="scoreBox" prefHeight="500.0" prefWidth="293.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="scoreLabel" style="-fx-text-fill: #e8e6e3;" text="Score is: 0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="gameModeLabel" minWidth="250.0" style="-fx-text-fill: #e8e6e3;" text="Player is: Human">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="pilotButtonHuman" mnemonicParsing="false" selected="true" style="-fx-text-fill: #e8e6e3;" text="Human">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="toggleGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="pilotButtonComputer" mnemonicParsing="false" style="-fx-text-fill: #e8e6e3;" text="Computer (Default)" toggleGroup="$toggleGroup">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </RadioButton>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </right>
+</BorderPane>
