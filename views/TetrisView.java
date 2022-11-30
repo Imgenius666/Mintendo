@@ -245,7 +245,7 @@ public class TetrisView implements Initializable {
         loadButton.setOnAction(e -> {
             createLoadView();
         });
-
+        // Button feature: MoveLeft, MoveRight, Drop, Rotate
         Left_movement.setOnAction(e -> {
             model.modelTick(TetrisModel.MoveType.LEFT);
         });
