@@ -41,6 +41,8 @@ import java.util.ResourceBundle;
  * Based on the Tetris assignment in the Nifty Assignments Database, authored by Nick Parlante
  */
 public class TetrisView implements Initializable {
+    @FXML
+    Button Left_movement, Right_movement, Rotate_movement, Down_movement;
     TetrisModel model; //reference to model
     Stage stage;
     @FXML
@@ -223,7 +225,7 @@ public class TetrisView implements Initializable {
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
-            model.resume();
+            //model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
@@ -244,6 +246,19 @@ public class TetrisView implements Initializable {
             createLoadView();
         });
 
+        Left_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.LEFT);
+        });
+
+        Right_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.RIGHT);
+        });
+        Down_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.DROP);
+        });
+        Rotate_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.ROTATE);
+        });
         //configure this such that you adjust the speed of the timeline to a value that
         //ranges between 0 and 3 times the default rate per model tick.  Make sure to return the
         //focus to the borderPane once you're done!
@@ -251,7 +266,6 @@ public class TetrisView implements Initializable {
             double val = slider.getValue();
             timeline.setRate(val * 3 / 100);
         });
-
         //configure this such that you can use controls to rotate and place pieces as you like!!
         //You'll want to respond to tie key presses to these moves:
         // TetrisModel.MoveType.DROP, TetrisModel.MoveType.ROTATE, TetrisModel.MoveType.LEFT
@@ -260,7 +274,7 @@ public class TetrisView implements Initializable {
         //if the autopilot is on, however.
         borderPane.setOnKeyReleased(k -> {
             switch (k.getCode()) {
-                case DOWN -> model.modelTick(TetrisModel.MoveType.DROP);
+                case S -> model.modelTick(TetrisModel.MoveType.DROP);
                 case A -> model.modelTick(TetrisModel.MoveType.LEFT);
                 case D -> model.modelTick(TetrisModel.MoveType.RIGHT);
                 case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
