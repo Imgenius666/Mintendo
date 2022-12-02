@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.paint.Color?>
+<?import javafx.scene.paint.LinearGradient?>
+<?import javafx.scene.paint.Stop?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TetrisView">
+   <center>
+      <Canvas fx:id="canvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
+   </center>
+   <bottom>
+      <VBox fx:id="vBox" prefHeight="15.0" prefWidth="800.0" spacing="20.0" BorderPane.alignment="TOP_CENTER">
+         <children>
+            <Slider fx:id="slider" showTickLabels="true" style="-fx-control-inner-background: palegreen;" value="50.0" />
+         </children>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </bottom>
+   <right>
+      <VBox fx:id="scoreBox" prefHeight="500.0" prefWidth="293.0" spacing="20.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="scoreLabel" style="-fx-text-fill: #e8e6e3;" text="Score is: 0">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="gameModeLabel" minWidth="250.0" style="-fx-text-fill: #e8e6e3;" text="Player is: Human">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <RadioButton fx:id="pilotButtonHuman" mnemonicParsing="false" selected="true" style="-fx-text-fill: #e8e6e3;" text="Human">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <toggleGroup>
+                  <ToggleGroup fx:id="toggleGroup" />
+               </toggleGroup>
+            </RadioButton>
+            <RadioButton fx:id="pilotButtonComputer" mnemonicParsing="false" style="-fx-text-fill: #e8e6e3;" text="Computer (Default)" toggleGroup="$toggleGroup">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </RadioButton>
+            <Button fx:id="Right_movement" mnemonicParsing="false" prefHeight="45.0" prefWidth="100.0" text="Right" textOverrun="WORD_ELLIPSIS">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets left="150.0" top="300.0" />
+               </VBox.margin>
+               <textFill>
+                  <LinearGradient endX="0.6113744075829384" endY="1.0" startX="1.0" startY="0.4834123222748815">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.28600001335144043" green="0.6499999761581421" blue="0.5953999757766724" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.40789473056793213" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button fx:id="Left_movement" mnemonicParsing="false" prefHeight="45.0" prefWidth="100.0" text="Left">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="-65.0" />
+               </VBox.margin>
+               <textFill>
+                  <LinearGradient endX="0.6113744075829384" endY="1.0" startX="1.0" startY="0.4834123222748815">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.28600001335144043" green="0.6499999761581421" blue="0.5953999757766724" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.5526315569877625" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+            </Button>
+            <Button fx:id="Rotate_movement" layoutY="550.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="100.0" text="Rotate">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.6113744075829384" endY="1.0" startX="1.0" startY="0.4834123222748815">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.28600001335144043" green="0.6499999761581421" blue="0.5953999757766724" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.34210526943206787" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+               <VBox.margin>
+                  <Insets left="135.0" top="-140.0" />
+               </VBox.margin>
+            </Button>
+            <Button fx:id="Down_movement" layoutY="420.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="100.0" text="Down">
+               <font>
+                  <Font size="20.0" />
+               </font>
+               <textFill>
+                  <LinearGradient endX="0.6113744075829384" endY="1.0" startX="1.0" startY="0.4834123222748815">
+                     <stops>
+                        <Stop>
+                           <color>
+                              <Color red="0.28600001335144043" green="0.6499999761581421" blue="0.5953999757766724" />
+                           </color>
+                        </Stop>
+                        <Stop offset="1.0">
+                           <color>
+                              <Color red="0.5526315569877625" green="0.0025584795512259007" blue="0.0025584795512259007" />
+                           </color>
+                        </Stop>
+                     </stops>
+                  </LinearGradient>
+               </textFill>
+               <VBox.margin>
+                  <Insets left="75.0" top="70.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
+   </right>
+   <top>
+      <MenuBar prefHeight="42.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Game">
+            <items>
+                  <MenuItem fx:id="newButton" mnemonicParsing="false" text="New Game" />
+                  <MenuItem fx:id="startButton" mnemonicParsing="false" style="e: 25 p;" text="Start Game" />
+                  <MenuItem fx:id="stopButton" mnemonicParsing="false" text="Stop" />
+                  <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="loadButton" mnemonicParsing="false" text="Load" />
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Settings">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
+      </MenuBar>
+   </top>
+</BorderPane>
