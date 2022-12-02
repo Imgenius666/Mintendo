@@ -1,7 +1,12 @@
-import javafx.application.Application;
-import javafx.stage.Stage;
+import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import model.TetrisModel;
 import views.TetrisView;
+
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /** 
  * A Tetris Application, in JavaFX
@@ -10,7 +15,6 @@ import views.TetrisView;
  */
 public class TetrisApp extends Application {
     TetrisModel model;
-    TetrisView view;
 
     /** 
      * Main method
@@ -28,9 +32,21 @@ public class TetrisApp extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
-        this.model = new TetrisModel(); // create a model
-        this.view = new TetrisView(model, primaryStage); //tie the model to the view
-        this.model.startGame(); //begin
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/Tetris_View.fxml"));
+            primaryStage.setTitle("CSC207 Tetris");
+            this.model = new TetrisModel(); // create a model
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            primaryStage.setScene(scene);
+            primaryStage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+            primaryStage.show();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
 }
