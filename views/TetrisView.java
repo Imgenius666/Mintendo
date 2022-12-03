@@ -1,14 +1,23 @@
 package views;
 
+import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import model.TetrisModel;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -17,7 +26,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.TetrisModel;
+import state.HighLevelState;
+import state.MusicContext;
+import state.MusicState;
+import state.NormalLevelState;
+
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import java.io.IOException;
+import java.net.URL;
+import java.util.Objects;
+import java.util.ResourceBundle;
 
 
 /**
@@ -25,210 +44,51 @@ import model.TetrisModel;
  *
  * Based on the Tetris assignment in the Nifty Assignments Database, authored by Nick Parlante
  */
-public class TetrisView {
-
+public class TetrisView implements Initializable {
+    @FXML
+    Button Left_movement, Right_movement, Rotate_movement, Down_movement;
     TetrisModel model; //reference to model
     Stage stage;
-
+    @FXML
     Button startButton, stopButton, loadButton, saveButton, newButton; //buttons for functions
-    Label scoreLabel = new Label("");
-    Label gameModeLabel = new Label("");
-
+    @FXML
+    Label scoreLabel, gameModeLabel;
+    @FXML
+    Slider slider;
+    @FXML
     BorderPane borderPane;
+    @FXML
     Canvas canvas;
+    @FXML
+    HBox controls;
+    @FXML
+    VBox vBox, scoreBox;
+    @FXML
     GraphicsContext gc; //the graphics context will be linked to the canvas
+    @FXML
+    RadioButton pilotButtonHuman, pilotButtonComputer;
 
     Boolean paused;
     Timeline timeline;
 
-    int pieceWidth = 20; //width of block on display
+    MusicContext mc;
+
+    boolean state;
+
+
+    int pieceWidth = 25; //width of block on display
     private double width; //height and width of canvas
     private double height;
-
-    /**
-     * Constructor
-     *
-     * @param model reference to tetris model
-     * @param stage application stage
-     */
-
-    public TetrisView(TetrisModel model, Stage stage) {
-        this.model = model;
-        this.stage = stage;
-        initUI();
+    public TetrisView() {
+        this.model = new TetrisModel();
+        this.mc = new MusicContext(true);
+        this.state = true;
     }
 
     /**
      * Initialize interface
      */
-    private void initUI() {
-        this.paused = false;
-        this.stage.setTitle("CSC207 Tetris");
-        this.width = this.model.getWidth()*pieceWidth + 2;
-        this.height = this.model.getHeight()*pieceWidth + 2;
-
-        borderPane = new BorderPane();
-        borderPane.setStyle("-fx-background-color: #121212;");
-
-        //add canvas
-        canvas = new Canvas(this.width, this.height);
-        canvas.setId("Canvas");
-        gc = canvas.getGraphicsContext2D();
-
-        //labels
-        gameModeLabel.setId("GameModeLabel");
-        scoreLabel.setId("ScoreLabel");
-
-        gameModeLabel.setText("Player is: Human");
-        gameModeLabel.setMinWidth(250);
-        gameModeLabel.setFont(new Font(20));
-        gameModeLabel.setStyle("-fx-text-fill: #e8e6e3");
-
-        final ToggleGroup toggleGroup = new ToggleGroup();
-
-        RadioButton pilotButtonHuman = new RadioButton("Human");
-        pilotButtonHuman.setToggleGroup(toggleGroup);
-        pilotButtonHuman.setSelected(true);
-        pilotButtonHuman.setUserData(Color.SALMON);
-        pilotButtonHuman.setFont(new Font(16));
-        pilotButtonHuman.setStyle("-fx-text-fill: #e8e6e3");
-
-        RadioButton pilotButtonComputer = new RadioButton("Computer (Default)");
-        pilotButtonComputer.setToggleGroup(toggleGroup);
-        pilotButtonComputer.setUserData(Color.SALMON);
-        pilotButtonComputer.setFont(new Font(16));
-        pilotButtonComputer.setStyle("-fx-text-fill: #e8e6e3");
-
-        scoreLabel.setText("Score is: 0");
-        scoreLabel.setFont(new Font(20));
-        scoreLabel.setStyle("-fx-text-fill: #e8e6e3");
-
-        //add buttons
-        startButton = new Button("Start");
-        startButton.setId("Start");
-        startButton.setPrefSize(150, 50);
-        startButton.setFont(new Font(12));
-        startButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
-
-        stopButton = new Button("Stop");
-        stopButton.setId("Start");
-        stopButton.setPrefSize(150, 50);
-        stopButton.setFont(new Font(12));
-        stopButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
-
-        saveButton = new Button("Save");
-        saveButton.setId("Save");
-        saveButton.setPrefSize(150, 50);
-        saveButton.setFont(new Font(12));
-        saveButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
-
-        loadButton = new Button("Load");
-        loadButton.setId("Load");
-        loadButton.setPrefSize(150, 50);
-        loadButton.setFont(new Font(12));
-        loadButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
-
-        newButton = new Button("New Game");
-        newButton.setId("New");
-        newButton.setPrefSize(150, 50);
-        newButton.setFont(new Font(12));
-        newButton.setStyle("-fx-background-color: #17871b; -fx-text-fill: white;");
-
-        HBox controls = new HBox(20, saveButton, loadButton, newButton, startButton, stopButton);
-        controls.setPadding(new Insets(20, 20, 20, 20));
-        controls.setAlignment(Pos.CENTER);
-
-        Slider slider = new Slider(0, 100, 50);
-        slider.setShowTickLabels(true);
-        slider.setStyle("-fx-control-inner-background: palegreen;");
-
-        VBox vBox = new VBox(20, slider);
-        vBox.setPadding(new Insets(20, 20, 20, 20));
-        vBox.setAlignment(Pos.TOP_CENTER);
-
-        VBox scoreBox = new VBox(20, scoreLabel, gameModeLabel, pilotButtonHuman, pilotButtonComputer);
-        scoreBox.setPadding(new Insets(20, 20, 20, 20));
-        vBox.setAlignment(Pos.TOP_CENTER);
-
-        toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> swapPilot(newVal));
-
-        //timeline structures the animation, and speed between application "ticks"
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-
-        //configure this such that you start a new game when the user hits the newButton
-        //Make sure to return the focus to the borderPane once you're done!
-        newButton.setOnAction(e -> {
-            model.newGame();
-        });
-
-        //configure this such that you restart the game when the user hits the startButton
-        //Make sure to return the focus to the borderPane once you're done!
-        startButton.setOnAction(e -> {
-            model.restartGame();
-        });
-
-        //configure this such that you pause the game when the user hits the stopButton
-        //Make sure to return the focus to the borderPane once you're done!
-        stopButton.setOnAction(e -> {
-            model.stopGame();
-        });
-
-        //configure this such that the save view pops up when the saveButton is pressed.
-        //Make sure to return the focus to the borderPane once you're done!
-        saveButton.setOnAction(e -> {
-            createSaveView();
-        });
-
-        //configure this such that the load view pops up when the loadButton is pressed.
-        //Make sure to return the focus to the borderPane once you're done!
-        loadButton.setOnAction(e -> {
-            createLoadView();
-        });
-
-        //configure this such that you adjust the speed of the timeline to a value that
-        //ranges between 0 and 3 times the default rate per model tick.  Make sure to return the
-        //focus to the borderPane once you're done!
-        slider.setOnMouseReleased(e -> {
-            double speed = slider.getValue();
-            timeline.setRate((speed / 100) * 3);
-        });
-
-        //configure this such that you can use controls to rotate and place pieces as you like!!
-        //You'll want to respond to tie key presses to these moves:
-        // TetrisModel.MoveType.DROP, TetrisModel.MoveType.ROTATE, TetrisModel.MoveType.LEFT
-        //and TetrisModel.MoveType.RIGHT
-        //make sure that you don't let the human control the board
-        //if the autopilot is on, however.
-        borderPane.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent k) {
-                switch (k.getCode()){
-                    case A:
-                        model.modelTick(TetrisModel.MoveType.LEFT);
-                        break;
-                    case D:
-                        model.modelTick(TetrisModel.MoveType.RIGHT);
-                        break;
-                    case R:
-                        model.modelTick(TetrisModel.MoveType.ROTATE);
-                        break;
-                    case S:
-                        model.modelTick(TetrisModel.MoveType.DOWN);
-                        break;
-                }
-            }
-        });
-
-        borderPane.setTop(controls);
-        borderPane.setRight(scoreBox);
-        borderPane.setCenter(canvas);
-        borderPane.setBottom(vBox);
-
-        var scene = new Scene(borderPane, 800, 800);
-        this.stage.setScene(scene);
-        this.stage.show();
+    private void initUI(){
     }
 
     /**
@@ -253,21 +113,35 @@ public class TetrisView {
      * Update board (paint pieces and score info)
      */
     private void updateBoard() {
-        if (this.paused != true) {
+        if (!this.paused) {
             paintBoard();
             this.model.modelTick(TetrisModel.MoveType.DOWN);
             updateScore();
+            System.out.println(this.paused);
         }
     }
 
     /**
      * Update score on UI
      */
+
+
     private void updateScore() {
-        if (this.paused != true) {
+        if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
+
+        }if(!this.paused && model.getScore() >= 20) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
+            }
         }
     }
+    public void transState(){
+        mc.TransitionToState(mc.current);
+        }
+
+
 
     /**
      * Methods to calibrate sizes of pixels relative to board size
@@ -276,7 +150,7 @@ public class TetrisView {
         return (int) Math.round(this.height -1 - (y+1)*dY());
     }
     private final int xPixel(int x) {
-        return (int) Math.round((x)*dX());
+        return Math.round((x)*dX());
     }
     private final float dX() {
         return( ((float)(this.width-2)) / this.model.getBoard().getWidth() );
@@ -288,6 +162,7 @@ public class TetrisView {
     /**
      * Draw the board
      */
+    @FXML
     public void paintBoard() {
 
         // Draw a rectangle around the whole screen
@@ -319,12 +194,12 @@ public class TetrisView {
                 }
             }
         }
-
     }
 
     /**
      * Create the view to save a board to a file
      */
+    @FXML
     private void createSaveView(){
         SaveView saveView = new SaveView(this);
     }
@@ -332,9 +207,118 @@ public class TetrisView {
     /**
      * Create the view to select a board to load
      */
+    @FXML
     private void createLoadView(){
         LoadView loadView = new LoadView(this);
     }
 
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.paused = false;
+        this.width = this.model.getWidth() * pieceWidth + 2;
+        this.height = this.model.getHeight() * pieceWidth + 2;
+
+        //add canvas
+        canvas.setWidth(this.width);
+        canvas.setHeight(this.height);
+        gc = canvas.getGraphicsContext2D();
+
+        final ToggleGroup toggleGroup = new ToggleGroup();
+
+        pilotButtonHuman.setToggleGroup(toggleGroup);
+        pilotButtonHuman.setUserData(Color.SALMON);
+
+        pilotButtonComputer.setToggleGroup(toggleGroup);
+        pilotButtonComputer.setUserData(Color.SALMON);
+
+        toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> swapPilot(newVal));
+
+        //timeline structures the animation, and speed between application "ticks"
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+
+        //configure this such that you start a new game when the user hits the newButton
+        //Make sure to return the focus to the borderPane once you're done!
+        newButton.setOnAction(e -> {
+            mc.current = new NormalLevelState();
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }else{
+                mc.sound.stop();
+                transState();
+            }
+            this.state = true;
+            model.newGame();
+        });
+
+        //configure this such that you restart the game when the user hits the startButton
+        //Make sure to return the focus to the borderPane once you're done!
+        startButton.setOnAction(e -> {
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }
+            model.resume();
+        });
+
+        //configure this such that you pause the game when the user hits the stopButton
+        //Make sure to return the focus to the borderPane once you're done!
+        stopButton.setOnAction(e -> {
+            mc.s = false;
+            transState();
+            model.stopGame();
+        });
+
+        //configure this such that the save view pops up when the saveButton is pressed.
+        //Make sure to return the focus to the borderPane once you're done!
+        saveButton.setOnAction(e -> {
+            createSaveView();
+        });
+
+        //configure this such that the load view pops up when the loadButton is pressed.
+        //Make sure to return the focus to the borderPane once you're done!
+        loadButton.setOnAction(e -> {
+            createLoadView();
+        });
+        // Button feature: MoveLeft, MoveRight, Drop, Rotate
+        Left_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.LEFT);
+        });
+
+        Right_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.RIGHT);
+        });
+        Down_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.DROP);
+        });
+        Rotate_movement.setOnAction(e -> {
+            model.modelTick(TetrisModel.MoveType.ROTATE);
+        });
+        //configure this such that you adjust the speed of the timeline to a value that
+        //ranges between 0 and 3 times the default rate per model tick.  Make sure to return the
+        //focus to the borderPane once you're done!
+        slider.setOnMouseReleased(e -> {
+            double val = slider.getValue();
+            timeline.setRate(val * 3 / 100);
+        });
+        //configure this such that you can use controls to rotate and place pieces as you like!!
+        //You'll want to respond to tie key presses to these moves:
+        // TetrisModel.MoveType.DROP, TetrisModel.MoveType.ROTATE, TetrisModel.MoveType.LEFT
+        //and TetrisModel.MoveType.RIGHT
+        //make sure that you don't let the human control the board
+        //if the autopilot is on, however.
+        borderPane.setOnKeyReleased(k -> {
+            switch (k.getCode()) {
+                case S -> model.modelTick(TetrisModel.MoveType.DROP);
+                case A -> model.modelTick(TetrisModel.MoveType.LEFT);
+                case D -> model.modelTick(TetrisModel.MoveType.RIGHT);
+                case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
+            }
+        });
+        transState();
+        this.model.startGame(); //begin
+    }
 }
