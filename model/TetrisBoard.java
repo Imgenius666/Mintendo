@@ -140,14 +140,21 @@ public class TetrisBoard implements Serializable{
      * @return the y value where the piece will come to rest
      */
     public int placementHeight(TetrisPiece piece, int x) {
-        int yValue = 0;
-        for(int i = 0; i < piece.getLowestYVals().length; i++){
-            int curr = colCounts[x + i] - piece.getLowestYVals()[i];
-            if(curr > yValue){
-                yValue = curr;
+        int[] lowestYV = piece.getLowestYVals();
+        int height = 0;
+        for (int i = 0; i < lowestYV.length; i++) {
+            int col = x + i;
+            if (col > width){
+                break;
+            }
+            if (getColumnHeight(col) - lowestYV[i] > height){
+                return getColumnHeight(col) - lowestYV[i];
+            }
+            else {
+                return height;
             }
         }
-        return yValue;
+        return height;
     }
 
     /**
