@@ -2,7 +2,9 @@ package views;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
@@ -11,7 +13,6 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Optional;
 
 
 /** 
@@ -81,32 +82,17 @@ public class SaveView {
     /**
      * Save the board to a file 
      */
-    //TODO
     public void saveBoard() {
-        String file_name = saveFileNameTextField.getText().trim();
-        if (file_name.isEmpty() || file_name.equals(".ser")) {
-            this.saveFileErrorLabel.setText("Need a file name.");
-        }else if(!file_name.endsWith(".ser")) {
-            this.saveFileErrorLabel.setText(saveFileNotSerError);
-        }else{
-            //String location = "./Assignment2/boards/" + saveFileNameTextField.getText();
-            String location = "./boards/" + saveFileNameTextField.getText();
-            File file = new File(location);
-            System.out.println(file.getAbsolutePath());
-            if (file.exists()) {
-                this.saveFileErrorLabel.setText(saveFileExistsError);
-            }else{
-                this.tetrisView.model.saveModel(file);
-                this.saveBoardLabel.setText(saveFileSuccess);
-//                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-//                alert.setTitle("File saved");
-//                alert.setContentText(saveFileSuccess);
-//                Optional<ButtonType> result = alert.showAndWait();
-//                if(result.isPresent() && result.get() == ButtonType.OK){
-//                    alert.close();
-//                }
-            }
+        String filename = saveFileNameTextField.getText().trim();
+        File file = new File("boards/" + filename);
+        if (!filename.endsWith(".ser")) {
+            System.out.println(SaveView.saveFileNotSerError);
+            return;
+        }
+        if (file.exists()){
+            System.out.println(SaveView.saveFileExistsError);
+        }
+        tetrisView.model.saveModel(file);
+        System.out.println(SaveView.saveFileSuccess);
         }
     }
-
-}
