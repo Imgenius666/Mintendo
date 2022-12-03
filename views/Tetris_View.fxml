@@ -4,35 +4,21 @@
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.paint.Color?>
 <?import javafx.scene.paint.LinearGradient?>
 <?import javafx.scene.paint.Stop?>
 <?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TetrisView">
-   <top>
-      <HBox fx:id="controls" prefHeight="100.0" prefWidth="200.0" spacing="20.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button fx:id="saveButton" mnemonicParsing="false" onAction="#createSaveView" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Save" />
-            <Button fx:id="loadButton" mnemonicParsing="false" onAction="#createLoadView" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Load" />
-            <Button fx:id="newButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="New Game" />
-            <Button fx:id="startButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Start" />
-            <Button fx:id="stopButton" mnemonicParsing="false" prefHeight="50.0" prefWidth="150.0" style="-fx-background-color: #17871b; -fx-text-fill: white;" text="Stop" />
-         </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
-      </HBox>
-   </top>
    <center>
       <Canvas fx:id="canvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
    </center>
@@ -78,6 +64,24 @@
                   <Font size="16.0" />
                </font>
             </RadioButton>
+            <BorderPane fx:id="secondBorderPane" prefHeight="200.0" prefWidth="200.0">
+               <VBox.margin>
+                  <Insets bottom="-200.0" />
+               </VBox.margin>
+               <center>
+                  <Canvas fx:id="secondCanvas" height="200.0" width="200.0" BorderPane.alignment="CENTER">
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin></Canvas>
+               </center>
+               <top>
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="This Piece" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Text>
+               </top>
+            </BorderPane>
             <Button fx:id="Right_movement" mnemonicParsing="false" prefHeight="45.0" prefWidth="100.0" text="Right" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font size="20.0" />
@@ -180,4 +184,30 @@
          </padding>
       </VBox>
    </right>
+   <top>
+      <MenuBar prefHeight="42.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <menus>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Game">
+               <items>
+                  <MenuItem fx:id="newButton" mnemonicParsing="false" text="New Game" />
+                  <MenuItem fx:id="startButton" mnemonicParsing="false" style="e: 25 p;" text="Start Game" />
+                  <MenuItem fx:id="stopButton" mnemonicParsing="false" text="Stop" />
+                  <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save" />
+                  <MenuItem fx:id="loadButton" mnemonicParsing="false" text="Load" />
+                  <MenuItem mnemonicParsing="false" text="Close" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Settings">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="About" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </top>
 </BorderPane>
