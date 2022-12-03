@@ -18,6 +18,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.TetrisModel;
+import state.MusicContext;
+import state.NormalLevelState;
 
 
 /**
@@ -45,6 +47,10 @@ public class TetrisView {
     private double width; //height and width of canvas
     private double height;
 
+    private MusicContext mc;
+
+    private boolean state;
+
     /**
      * Constructor
      *
@@ -55,6 +61,8 @@ public class TetrisView {
     public TetrisView(TetrisModel model, Stage stage) {
         this.model = model;
         this.stage = stage;
+        this.mc = new MusicContext(true);
+        this.state = true;
         initUI();
     }
 
@@ -160,18 +168,34 @@ public class TetrisView {
         //configure this such that you start a new game when the user hits the newButton
         //Make sure to return the focus to the borderPane once you're done!
         newButton.setOnAction(e -> {
+            mc.current = new NormalLevelState();
+            if (!mc.s) {
+                mc.s = true;
+                transState();
+            } else {
+                mc.sound.stop();
+                transState();
+            }
+            this.state = true;
             model.newGame();
         });
+
 
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }
             model.restartGame();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
         //Make sure to return the focus to the borderPane once you're done!
         stopButton.setOnAction(e -> {
+            mc.s = false;
+            transState();
             model.stopGame();
         });
 
@@ -228,6 +252,7 @@ public class TetrisView {
 
         var scene = new Scene(borderPane, 800, 800);
         this.stage.setScene(scene);
+        transState();
         this.stage.show();
     }
 
@@ -266,7 +291,17 @@ public class TetrisView {
     private void updateScore() {
         if (this.paused != true) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
+
         }
+        if (!this.paused && model.getScore() >= 2) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
+            }
+        }
+    }
+    public void transState(){
+        mc.TransitionToState(mc.current);
     }
 
     /**

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="711e1bb0-6c72-4c67-b134-54e19bc059f4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/javafx_swt.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Mintendo.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/model/Sound2.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/excellent.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/gameover.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/good.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/hitsound.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/remove.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/tetrishighlevel1.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/tetrisnormal1.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/soundfile/unbelievable.wav" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/state/HighLevelState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/state/MusicContext.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/state/MusicState.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/state/NormalLevelState.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/lib.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/TetrisModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/model/TetrisModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/TetrisTests.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/AutoPilot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisBoard.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisModel$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisModel$MoveType.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisModel.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisPiece.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisPilot.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/model/TetrisPoint.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/views/LoadView.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/views/SaveView.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/views/TetrisView$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Assignment2/views/TetrisView.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/TetrisView.java" beforeDir="false" afterPath="$PROJECT_DIR$/views/TetrisView.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2IOI088E2ZAMnJvwwzkmHqHkK24" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/Users/lucyyyy/CSC207/jiaxiao8/Mintendo",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="model" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="TetrisApp" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="TetrisApp" />
+      <module name="Mintendo" />
+      <option name="VM_PARAMETERS" value="--module-path &quot;$PROJECT_DIR$/../javafx-sdk-19/lib&quot; --add-modules javafx.controls,javafx.fxml" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.TetrisApp" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="711e1bb0-6c72-4c67-b134-54e19bc059f4" name="Changes" comment="" />
+      <created>1670045976753</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1670045976753</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
