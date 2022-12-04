@@ -15,10 +15,12 @@ public class Sound2 {
 
         soundURL[0] = getClass().getResource("/soundfile/hitsound.wav");
         soundURL[1] = getClass().getResource("/soundfile/remove.wav");
-        soundURL[2] = getClass().getResource("/soundfile/tetrissound.wav");
+        soundURL[2] = getClass().getResource("/soundfile/tetrisnormal1.wav");
         soundURL[3] = getClass().getResource("/soundfile/good.wav");
         soundURL[4] = getClass().getResource("/soundfile/excellent.wav");
         soundURL[5] = getClass().getResource("/soundfile/unbelievable.wav");
+        soundURL[6] = getClass().getResource("/soundfile/tetrishighlevel1.wav");
+        soundURL[7] = getClass().getResource("/soundfile/gameover.wav");
 
     }
 
@@ -34,6 +36,7 @@ public class Sound2 {
     }
     public void play(){
         clip.start();
+
     }
     public void loop(){
         clip.loop(Clip.LOOP_CONTINUOUSLY);

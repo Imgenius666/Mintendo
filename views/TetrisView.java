@@ -27,6 +27,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import state.MusicContext;
+import state.NormalLevelState;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -73,8 +75,16 @@ public class TetrisView implements Initializable {
     int pieceWidth = 25; //width of block on display
     private double width; //height and width of canvas
     private double height;
+
+    private MusicContext mc;
+
+    private boolean state;
+
+
     public TetrisView() {
         this.model = new TetrisModel();
+        this.mc = new MusicContext(true);
+        this.state = true;
     }
 
     /**
@@ -121,6 +131,15 @@ public class TetrisView implements Initializable {
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
         }
+        if (!this.paused && model.getScore() >= 30) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
+            }
+        }
+    }
+    public void transState(){
+        mc.TransitionToState(mc.current);
     }
 
     /**
@@ -207,6 +226,7 @@ public class TetrisView implements Initializable {
         }
     }
 
+    //public void
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -230,6 +250,7 @@ public class TetrisView implements Initializable {
         toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> swapPilot(newVal));
 
         //timeline structures the animation, and speed between application "ticks"
+
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -237,18 +258,34 @@ public class TetrisView implements Initializable {
         //configure this such that you start a new game when the user hits the newButton
         //Make sure to return the focus to the borderPane once you're done!
         newButton.setOnAction(e -> {
+
+            mc.current = new NormalLevelState();
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }else{
+                mc.sound.stop();
+                transState();
+            }
+            this.state = true;
             model.newGame();
         });
 
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }
             model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
         //Make sure to return the focus to the borderPane once you're done!
         stopButton.setOnAction(e -> {
+            mc.s = false;
+            transState();
             model.stopGame();
         });
 
@@ -298,7 +335,7 @@ public class TetrisView implements Initializable {
                 case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
             }
         });
-
+        transState();
         this.model.startGame(); //begin
     }
 }

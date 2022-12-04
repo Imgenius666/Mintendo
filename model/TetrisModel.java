@@ -1,6 +1,8 @@
 package model;
 
 import state.MusicContext;
+import state.MusicState;
+import state.NormalLevelState;
 
 import java.io.*;
 import java.util.Random;
@@ -31,8 +33,9 @@ public class TetrisModel implements Serializable {
     private boolean autoPilotMode; //are we in autopilot mode?
     protected TetrisPilot pilot;
 
-    public MusicContext mc;
     public Sound2 soundeffect;
+
+    public MusicContext mc;
 
     public enum MoveType {
         ROTATE,
@@ -185,7 +188,7 @@ public class TetrisModel implements Serializable {
         gameOn = false;
     }
 
-    public void restartGame() {
+    public void resume() {
         gameOn = true;
     }
 
@@ -321,7 +324,9 @@ public class TetrisModel implements Serializable {
 
             // if the board is too tall, we've lost!
             if (board.getMaxHeight() > board.getHeight() - BUFFERZONE) {
+                playSE(7);
                 stopGame();
+
             }
 
             // Otherwise, add a new piece and keep playing
@@ -362,11 +367,12 @@ public class TetrisModel implements Serializable {
         return this.autoPilotMode;
     }
 
-    public  void playSE(int i){
+    public void playSE(int i){
         soundeffect.setFile(i);
         soundeffect.play();
     }
-}
+    }
+
 
 
 

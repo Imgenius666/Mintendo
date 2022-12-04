@@ -1,17 +1,22 @@
 package state;
 
 public class NormalLevelState implements MusicState {
-    @Override
+
     public void Determine(MusicContext mc) {
-        if (mc.score >= 50){
-            mc.sound.stop();
-        }
+        mc.sound.stop();
+        mc.TransitionToState(new HighLevelState());
+
     }
 
     @Override
     public void EnterState(MusicContext mc) {
-        mc.sound.setFile(2);
-        mc.sound.play();
+        if (mc.s) {
+            mc.sound.setFile(2);
+            mc.sound.play();
+            mc.sound.loop();
+        } else {
+            mc.sound.stop();
+        }
     }
 }
 
