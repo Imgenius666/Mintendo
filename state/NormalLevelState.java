@@ -18,5 +18,8 @@ public class NormalLevelState implements MusicState {
             mc.sound.stop();
         }
     }
+    public String toString(){
+        return "Normallevel State";
+    }
 }
 

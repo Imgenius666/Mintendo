@@ -4,8 +4,6 @@ public class HighLevelState implements MusicState {
 
     public void Determine(MusicContext mc) {
         System.out.println("Highlevel music state");
-//        mc.sound.stop();
-//        mc.TransitionToState(new NormalLevelState());
     }
 
     @Override
@@ -17,5 +15,8 @@ public class HighLevelState implements MusicState {
         } else {
             mc.sound.stop();
         }
+    }
+    public String toString(){
+        return "Highlevel State";
     }
 }

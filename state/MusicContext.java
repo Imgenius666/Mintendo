@@ -9,8 +9,6 @@ public class MusicContext {
     public MusicState current;
 
     public boolean s;
-    //image
-    //time
 
     public MusicContext(boolean s) {
         this.sound = new Sound2();
@@ -26,8 +24,6 @@ public class MusicContext {
         current.Determine(this);
     }
 
-//    public void Changes(boolean s){
-//        this.s = s;
-//    }
+
 
 }

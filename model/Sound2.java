@@ -8,10 +8,11 @@ import java.net.URL;
 
 public class Sound2 {
 
-    Clip clip;
+    public Clip clip;
     URL soundURL[] = new URL[30];
+    public boolean det;
 
-    public Sound2(){
+    public Sound2() {
 
         soundURL[0] = getClass().getResource("/soundfile/hitsound.wav");
         soundURL[1] = getClass().getResource("/soundfile/remove.wav");
@@ -21,28 +22,44 @@ public class Sound2 {
         soundURL[5] = getClass().getResource("/soundfile/unbelievable.wav");
         soundURL[6] = getClass().getResource("/soundfile/tetrishighlevel1.wav");
         soundURL[7] = getClass().getResource("/soundfile/gameover.wav");
-
+        this.det = true;
     }
 
-    public void setFile(int i){
-        try{
+    public void setFile(int i) {
+        try {
             AudioInputStream ais = AudioSystem.getAudioInputStream(soundURL[i]);
             clip = AudioSystem.getClip();
             clip.open(ais);
 
-        }catch(Exception e){
+        } catch (Exception e) {
 
         }
     }
-    public void play(){
-        clip.start();
+
+    public void play() {
+        try {
+            clip.start();
+
+        } catch (java.lang.NullPointerException e) {
+            det = false;
+
+        }
+
 
     }
-    public void loop(){
+
+    public void loop() {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
-    public void stop(){
-        clip.stop();
-    }
 
+    public void stop() {
+        try {
+            clip.stop();
+            det = false;
+        } catch (java.lang.NullPointerException e) {
+            det = false;
+
+        }
+
+    }
 }
