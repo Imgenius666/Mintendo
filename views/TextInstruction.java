@@ -11,7 +11,7 @@ public class TextInstruction extends TetrisView implements Command{
      * @param stage application stage
      */
     public TextInstruction(TetrisModel model, Stage stage) {
-        super(model, stage);
+        //super(model, stage);
     }
 
     @Override

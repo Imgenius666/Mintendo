@@ -21,7 +21,7 @@ public class ChangeColorMode extends TetrisView implements Command{
      * @param stage application stage
      */
     public ChangeColorMode(TetrisModel model, Stage stage, TetrisView tetrisView) {
-        super(model, stage);
+        //super(model, stage);
         this.tetrisView = tetrisView;
 
         //Pausing the current scene, creating new stage
@@ -88,7 +88,7 @@ public class ChangeColorMode extends TetrisView implements Command{
         // Draw a rectangle around the whole screen
         tetrisView.gc.setStroke(Color.rgb(168, 50, 168));
         tetrisView.gc.setFill(Color.rgb(168, 50, 168));
-        tetrisView.gc.fillRect(0, 0, tetrisView.getWidth()-1, tetrisView.getHeight()-1);
+        //tetrisView.gc.fillRect(0, 0, tetrisView.getWidth()-1, tetrisView.getHeight()-1);
     }
 
 

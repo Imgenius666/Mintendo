@@ -19,6 +19,8 @@
 <?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TetrisView">
+=======
+<BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="800.0" style="-fx-background-color: #121212;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TetrisView">
    <center>
       <Canvas fx:id="canvas" height="200.0" width="200.0" BorderPane.alignment="CENTER" />
    </center>
@@ -186,14 +188,21 @@
    </right>
    <top>
       <MenuBar prefHeight="42.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+
          <menus>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Game">
                <items>
+=======
+        <menus>
+          <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Game">
+            <items>
+
                   <MenuItem fx:id="newButton" mnemonicParsing="false" text="New Game" />
                   <MenuItem fx:id="startButton" mnemonicParsing="false" style="e: 25 p;" text="Start Game" />
                   <MenuItem fx:id="stopButton" mnemonicParsing="false" text="Stop" />
                   <MenuItem fx:id="saveButton" mnemonicParsing="false" text="Save" />
                   <MenuItem fx:id="loadButton" mnemonicParsing="false" text="Load" />
+
                   <MenuItem mnemonicParsing="false" text="Close" />
                </items>
             </Menu>
@@ -208,6 +217,21 @@
                </items>
             </Menu>
          </menus>
+=======
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Settings">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
+              </items>
+            </Menu>
+          <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+        </menus>
       </MenuBar>
    </top>
 </BorderPane>

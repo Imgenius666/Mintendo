@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
@@ -59,6 +60,9 @@ public class TetrisView implements Initializable {
     BufferedImage image;
     @FXML
     Canvas canvas, secondCanvas;
+    AnchorPane anchorPane;
+    @FXML
+    Canvas canvas;
     @FXML
     HBox controls;
     @FXML
@@ -74,6 +78,7 @@ public class TetrisView implements Initializable {
 
     Boolean paused;
     Timeline timeline;
+
 
     int pieceWidth = 25; //width of block on display
 
@@ -134,9 +139,12 @@ public class TetrisView implements Initializable {
         }
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
+
         }
         i = model.getScore() + model.getCount();
     }
+
+
 
     /**
      * Methods to calibrate sizes of pixels relative to board size
@@ -289,7 +297,7 @@ public class TetrisView implements Initializable {
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
-            //model.resume();
+            model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
@@ -344,7 +352,6 @@ public class TetrisView implements Initializable {
                 case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
             }
         });
-
         this.model.startGame(); //begin
     }
 }
