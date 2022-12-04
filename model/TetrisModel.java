@@ -1,5 +1,7 @@
 package model;
 
+import state.MusicContext;
+
 import java.io.*;
 import java.util.Random;
 
@@ -29,6 +31,9 @@ public class TetrisModel implements Serializable {
     private boolean autoPilotMode; //are we in autopilot mode?
     protected TetrisPilot pilot;
 
+    public MusicContext mc;
+    public Sound2 soundeffect;
+
     public enum MoveType {
         ROTATE,
         LEFT,
@@ -46,6 +51,7 @@ public class TetrisModel implements Serializable {
         autoPilotMode = false;
         gameOn = false;
         pilot = new AutoPilot();
+        soundeffect = new Sound2();
     }
 
 
@@ -102,6 +108,7 @@ public class TetrisModel implements Serializable {
                 break;
 
             case DROP: //drop
+                playSE(0);
                 newY = board.placementHeight(newPiece, newX);
                 if (newY > currentY) { //piece can't move up!
                     newY = currentY;
@@ -178,7 +185,7 @@ public class TetrisModel implements Serializable {
         gameOn = false;
     }
 
-    public void resume() {
+    public void restartGame() {
         gameOn = true;
     }
 
@@ -287,29 +294,34 @@ public class TetrisModel implements Serializable {
         if (failed && verb == MoveType.DOWN) {    // if it's out of bounds due to falling
             int cleared = board.clearRows();
             if (cleared > 0) {
+                playSE(1);
                 // scores go up by 5, 10, 20, 40 as more rows are cleared
                 switch (cleared) {
                     case 1:
                         score += 5;
+                        playSE(3);
                         break;
                     case 2:
                         score += 10;
+                        playSE(4);
                         break;
                     case 3:
                         score += 20;
+                        playSE(4);
                         break;
                     case 4:
                         score += 40;
+                        playSE(5);
                         break;
                     default:
                         score += 50;
+                        playSE(5);
                 }
             }
 
             // if the board is too tall, we've lost!
             if (board.getMaxHeight() > board.getHeight() - BUFFERZONE) {
                 stopGame();
-
             }
 
             // Otherwise, add a new piece and keep playing
@@ -350,8 +362,11 @@ public class TetrisModel implements Serializable {
         return this.autoPilotMode;
     }
 
+    public  void playSE(int i){
+        soundeffect.setFile(i);
+        soundeffect.play();
     }
-
+}
 
 
 

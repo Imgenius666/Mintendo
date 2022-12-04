@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.layout.AnchorPane;
 import model.TetrisModel;
 
 import javafx.animation.KeyFrame;
@@ -46,13 +47,15 @@ public class TetrisView implements Initializable {
     TetrisModel model; //reference to model
     Stage stage;
     @FXML
-    Button startButton, stopButton, loadButton, saveButton, newButton; //buttons for functions
+    MenuItem startButton, stopButton, loadButton, saveButton, newButton; //menu items for some functions
     @FXML
     Label scoreLabel, gameModeLabel;
     @FXML
     Slider slider;
     @FXML
     BorderPane borderPane;
+    @FXML
+    AnchorPane anchorPane;
     @FXML
     Canvas canvas;
     @FXML
@@ -153,14 +156,13 @@ public class TetrisView implements Initializable {
 
         // Draw the line separating the top area on the screen
         gc.setStroke(Color.BLACK);
-        int spacerY = yPixel(this.model.getBoard().getHeight() - this.model.BUFFERZONE - 1);
+        int spacerY = yPixel(this.model.getBoard().getHeight() - TetrisModel.BUFFERZONE - 1);
         gc.strokeLine(0, spacerY, this.width-1, spacerY);
 
         // Factor a few things out to help the optimizer
         final int dx = Math.round(dX()-2);
         final int dy = Math.round(dY()-2);
         final int bWidth = this.model.getBoard().getWidth();
-
         int x, y;
         // Loop through and draw all the blocks; sizes of blocks are calibrated relative to screen size
         for (x=0; x<bWidth; x++) {
@@ -191,6 +193,22 @@ public class TetrisView implements Initializable {
     @FXML
     private void createLoadView(){
         LoadView loadView = new LoadView(this);
+    }
+    //Create a new setting page
+    @FXML
+    private void openSettingsPage(){
+        this.model.stopGame();
+        try{
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Settings.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setTitle("Settings");
+            stage.setScene(scene);
+            stage.show();
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -249,7 +267,7 @@ public class TetrisView implements Initializable {
         loadButton.setOnAction(e -> {
             createLoadView();
         });
-        // Button feature: MoveLeft, MoveRight, Drop, Rotate
+
         Left_movement.setOnAction(e -> {
             model.modelTick(TetrisModel.MoveType.LEFT);
         });
