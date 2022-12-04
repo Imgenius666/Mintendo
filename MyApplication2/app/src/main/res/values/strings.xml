@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">My Application</string>
+    <string name="rotate">Rotate</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="drop">Drop</string>
+</resources>
