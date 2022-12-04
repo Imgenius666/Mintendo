@@ -1,5 +1,6 @@
 package views;
 
+import model.TetrisModel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,9 +12,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.TetrisModel;
 
 import java.io.*;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
 
 /**
  * Load File View
@@ -95,10 +100,14 @@ public class LoadView {
      * @return the index in the listView of Stater.ser
      */
     private void getFiles(ListView<String> listView) {
-        File file = new File("boards");
-        for (File files: file.listFiles()){
-            if (files.getName().endsWith(".ser")){
-                listView.getItems().add(files.getName());
+        //File folder = new File("./Assignment2/boards/");
+        File folder = new File("./boards/");
+        File[] listOfFiles = folder.listFiles();
+        if (listOfFiles!= null) {
+            for (File file : listOfFiles){
+                if (!file.isDirectory() && file.getName().endsWith(".ser")){
+                    listView.getItems().add(file.getName());
+                }
             }
         }
     }
@@ -109,10 +118,12 @@ public class LoadView {
      * @param selectBoardLabel a message Label to update which board is currently selected
      * @param boardsList a ListView populated with tetris.boards to load
      */
+    //TODO
     private void selectBoard(Label selectBoardLabel, ListView<String> boardsList) throws IOException {
-        String file = boardsList.getSelectionModel().getSelectedItem();
-        selectBoardLabel.setText(file);
-        tetrisView.model = loadBoard("boards/" + file);
+        String selected_file= boardsList.getSelectionModel().getSelectedItem();
+        selectBoardLabel.setText("File selected: " + selected_file);
+        //tetrisView.model = loadBoard("./Assignment2/boards/" + selected_file);
+        tetrisView.model = loadBoard("./boards/" + selected_file);
     }
 
     /**
@@ -131,13 +142,10 @@ public class LoadView {
             file = new FileInputStream(boardFile);
             in = new ObjectInputStream(file);
             return (TetrisModel) in.readObject();
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             throw new RuntimeException(e);
         } finally {
+            assert in != null;
             in.close();
             file.close();
         }
