@@ -79,6 +79,11 @@ public class TetrisView implements Initializable {
     Boolean paused;
     Timeline timeline;
 
+    private state.MusicContext mc;
+
+    private boolean state;
+
+
 
     int pieceWidth = 25; //width of block on display
 
@@ -89,6 +94,9 @@ public class TetrisView implements Initializable {
 
     public TetrisView() {
         this.model = new TetrisModel();
+
+        this.mc = new state.MusicContext(true);
+        this.state = true;
 
     }
 
@@ -141,7 +149,17 @@ public class TetrisView implements Initializable {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
 
         }
-        i = model.getScore() + model.getCount();
+
+        if (!this.paused && model.getScore() >= 30) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
+            }
+        }
+    }
+
+    public void transState(){
+        mc.TransitionToState(mc.current);
     }
 
 
@@ -291,18 +309,33 @@ public class TetrisView implements Initializable {
         //configure this such that you start a new game when the user hits the newButton
         //Make sure to return the focus to the borderPane once you're done!
         newButton.setOnAction(e -> {
+            mc.current = new state.NormalLevelState();
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }else{
+                mc.sound.stop();
+                transState();
+            }
+            this.state = true;
             model.newGame();
         });
 
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }
             model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
         //Make sure to return the focus to the borderPane once you're done!
         stopButton.setOnAction(e -> {
+            mc.s = false;
+            transState();
             model.stopGame();
         });
 
@@ -352,6 +385,8 @@ public class TetrisView implements Initializable {
                 case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
             }
         });
+
+        transState();
         this.model.startGame(); //begin
     }
 }
