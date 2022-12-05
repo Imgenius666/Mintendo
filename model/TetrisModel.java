@@ -1,5 +1,9 @@
 package model;
 
+import state.MusicContext;
+import state.MusicState;
+import state.NormalLevelState;
+
 import java.io.*;
 import java.util.Random;
 
@@ -16,18 +20,22 @@ public class TetrisModel implements Serializable {
     protected TetrisPiece[] pieces; // Pieces to be places on the board
     protected TetrisPiece currentPiece; //Piece we are currently placing
     protected TetrisPiece newPiece; //next piece to be placed
-    protected int count;		 // how many pieces played so far
+    protected int count;         // how many pieces played so far
     protected int score; //the player's score
 
     protected int currentX, newX;
     protected int currentY, newY;
 
     // State of the game
-    protected boolean gameOn;	// true if we are playing
-    protected Random random;	 // the random generator for new pieces
+    protected boolean gameOn;    // true if we are playing
+    protected Random random;     // the random generator for new pieces
 
     private boolean autoPilotMode; //are we in autopilot mode?
     protected TetrisPilot pilot;
+
+    public Sound2 soundeffect;
+
+    public MusicContext mc;
 
     public enum MoveType {
         ROTATE,
@@ -46,6 +54,7 @@ public class TetrisModel implements Serializable {
         autoPilotMode = false;
         gameOn = false;
         pilot = new AutoPilot();
+        soundeffect = new Sound2();
     }
 
 
@@ -63,7 +72,7 @@ public class TetrisModel implements Serializable {
     /**
      * Board getter
      *
-     * @return  board
+     * @return board
      */
     public TetrisBoard getBoard() {
         return this.board;
@@ -71,7 +80,7 @@ public class TetrisModel implements Serializable {
 
     /**
      * Compute New Position of piece in play based on move type
-     * 
+     *
      * @param verb type of move to account for
      */
     public void computeNewPosition(MoveType verb) {
@@ -83,14 +92,18 @@ public class TetrisModel implements Serializable {
 
         // Make changes based on the verb
         switch (verb) {
-            case LEFT: newX--; break; //move left
+            case LEFT:
+                newX--;
+                break; //move left
 
-            case RIGHT: newX++; break; //move right
+            case RIGHT:
+                newX++;
+                break; //move right
 
             case ROTATE: //rotate
                 newPiece = newPiece.fastRotation();
-                newX = newX + (currentPiece.getWidth() - newPiece.getWidth())/2;
-                newY = newY + (currentPiece.getHeight() - newPiece.getHeight())/2;
+                newX = newX + (currentPiece.getWidth() - newPiece.getWidth()) / 2;
+                newY = newY + (currentPiece.getHeight() - newPiece.getHeight()) / 2;
                 break;
 
             case DOWN: //down
@@ -98,6 +111,7 @@ public class TetrisModel implements Serializable {
                 break;
 
             case DROP: //drop
+                playSE(0);
                 newY = board.placementHeight(newPiece, newX);
                 if (newY > currentY) { //piece can't move up!
                     newY = currentY;
@@ -111,7 +125,7 @@ public class TetrisModel implements Serializable {
     }
 
     /**
-     * Put new piece in play on board 
+     * Put new piece in play on board
      */
     public void addNewPiece() {
         count++;
@@ -124,7 +138,7 @@ public class TetrisModel implements Serializable {
         TetrisPiece piece = pickNextPiece();
 
         // Center it up at the top
-        int px = (board.getWidth() - piece.getWidth())/2;
+        int px = (board.getWidth() - piece.getWidth()) / 2;
         int py = board.getHeight() - piece.getHeight();
 
         int result = setCurrent(piece, px, py);
@@ -136,22 +150,21 @@ public class TetrisModel implements Serializable {
     }
 
     /**
-     * Pick next piece to put in play on board 
+     * Pick next piece to put in play on board
      */
     private TetrisPiece pickNextPiece() {
         int pieceNum;
         pieceNum = (int) (pieces.length * random.nextDouble());
-        TetrisPiece piece	 = pieces[pieceNum];
-        return(piece);
+        TetrisPiece piece = pieces[pieceNum];
+        return (piece);
     }
 
     /**
      * Attempt to set the piece at a given board position
-     * 
+     *
      * @param piece piece to place
-     * @param x placement position, x
-     * @param y placement position, y
-     * 
+     * @param x     placement position, x
+     * @param y     placement position, y
      * @return integer defining if placement is OK or not (see Board.java)
      */
     public int setCurrent(TetrisPiece piece, int x, int y) {
@@ -165,7 +178,7 @@ public class TetrisModel implements Serializable {
             board.undo();
         }
 
-        return(result);
+        return (result);
     }
 
     /**
@@ -175,14 +188,14 @@ public class TetrisModel implements Serializable {
         gameOn = false;
     }
 
-    public void restartGame(){
+    public void resume() {
         gameOn = true;
     }
 
     /**
      * Get width
-     * 
-     * @return width 
+     *
+     * @return width
      */
     public double getWidth() {
         return WIDTH;
@@ -190,8 +203,8 @@ public class TetrisModel implements Serializable {
 
     /**
      * Get width
-     * 
-     * @return height (with buffer at top accounted for) 
+     *
+     * @return height (with buffer at top accounted for)
      */
     public double getHeight() {
         return HEIGHT + BUFFERZONE;
@@ -199,7 +212,7 @@ public class TetrisModel implements Serializable {
 
     /**
      * Get width
-     * 
+     *
      * @return score of game
      */
     public int getScore() {
@@ -208,7 +221,7 @@ public class TetrisModel implements Serializable {
 
     /**
      * Get width
-     * 
+     *
      * @return number of pieces placed
      */
     public int getCount() {
@@ -250,23 +263,23 @@ public class TetrisModel implements Serializable {
      * Then execute it.
      */
     private void computerMove() {
-        MoveType verb = pilot.bestMove(board,currentPiece,currentX,currentY); //which move is best?
+        MoveType verb = pilot.bestMove(board, currentPiece, currentX, currentY); //which move is best?
         executeMove(verb);
     }
 
     /**
-     * Execute a given move.  This will compute the new position of the active piece, 
+     * Execute a given move.  This will compute the new position of the active piece,
      * set the piece to this location if possible.  If lines are completed
      * as a result of the move, the lines will be cleared from the board,
      * and the board will be updated.  Scores will be added to the player's
      * total based on the number of rows cleared.
-     * 
+     *
      * @param verb the type of move to execute
      */
     private void executeMove(MoveType verb) {
 
         if (currentPiece != null) {
-            board.undo();	// remove the piece from its old position
+            board.undo();    // remove the piece from its old position
         }
 
         computeNewPosition(verb);
@@ -281,22 +294,39 @@ public class TetrisModel implements Serializable {
             if (currentPiece != null) board.placePiece(currentPiece, currentX, currentY);
         }
 
-        if (failed && verb==MoveType.DOWN){	// if it's out of bounds due to falling
+        if (failed && verb == MoveType.DOWN) {    // if it's out of bounds due to falling
             int cleared = board.clearRows();
             if (cleared > 0) {
+                playSE(1);
                 // scores go up by 5, 10, 20, 40 as more rows are cleared
                 switch (cleared) {
-                    case 1: score += 5;	 break;
-                    case 2: score += 10;  break;
-                    case 3: score += 20;  break;
-                    case 4: score += 40;  break;
-                    default: score += 50;
+                    case 1:
+                        score += 5;
+                        playSE(3);
+                        break;
+                    case 2:
+                        score += 10;
+                        playSE(4);
+                        break;
+                    case 3:
+                        score += 20;
+                        playSE(4);
+                        break;
+                    case 4:
+                        score += 40;
+                        playSE(5);
+                        break;
+                    default:
+                        score += 50;
+                        playSE(5);
                 }
             }
 
             // if the board is too tall, we've lost!
             if (board.getMaxHeight() > board.getHeight() - BUFFERZONE) {
+                playSE(7);
                 stopGame();
+
             }
 
             // Otherwise, add a new piece and keep playing
@@ -318,7 +348,7 @@ public class TetrisModel implements Serializable {
 
     /**
      * Save the current state of the game to a file
-     * 
+     *
      * @param file pointer to file to write to
      */
     public void saveModel(File file) {
@@ -337,7 +367,13 @@ public class TetrisModel implements Serializable {
     public boolean getAutoPilotMode() {
         return this.autoPilotMode;
     }
-}
+
+    public void playSE(int i){
+        soundeffect.setFile(i);
+        soundeffect.play();
+    }
+    }
+
 
 
 

@@ -1,4 +1,17 @@
 package views;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
+import model.TetrisModel;
 
 import javafx.application.Application;
 import javafx.beans.value.ObservableValue;
@@ -11,9 +24,6 @@ import model.TetrisModel;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.canvas.Canvas;
@@ -24,16 +34,24 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 import java.util.ResourceBundle;
+=======
+import model.TetrisPiece;
+
+import javax.imageio.ImageIO;
+import java.io.File;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import static model.TetrisPiece.SQUARE_STR;
 
 
 /**
@@ -53,28 +71,49 @@ public class TetrisView implements Initializable {
     @FXML
     Slider slider;
     @FXML
-    BorderPane borderPane;
+    BorderPane borderPane, secondBorderPane;
     @FXML
     AnchorPane anchorPane;
     @FXML
-    Canvas canvas;
+    BufferedImage image;
+    @FXML
+    Canvas canvas, secondCanvas;
+    AnchorPane anchorPane;
     @FXML
     HBox controls;
     @FXML
     VBox vBox, scoreBox;
     @FXML
-    GraphicsContext gc; //the graphics context will be linked to the canvas
+    GraphicsContext gc;
+    @FXML
+    GraphicsContext bx;
+    @FXML
+    GraphicsContext g; //the graphics context will be linked to the canvas
     @FXML
     RadioButton pilotButtonHuman, pilotButtonComputer;
 
     Boolean paused;
     Timeline timeline;
+    
+    private state.MusicContext mc;
+
+    private boolean state;
+
+
 
     int pieceWidth = 25; //width of block on display
+
+    int i = 0;
     private double width; //height and width of canvas
     private double height;
+    private TetrisPiece piece;
+
     public TetrisView() {
         this.model = new TetrisModel();
+
+        this.mc = new state.MusicContext(true);
+        this.state = true;
+
     }
 
     /**
@@ -117,11 +156,30 @@ public class TetrisView implements Initializable {
      */
 
 
-    public void updateScore() {
+
+    private void updateScore() {
+        if (i != model.getScore() + + model.getCount()){
+            clearBoard();
+            printSecondBoard();
+        }
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
+
+        }
+
+        if (!this.paused && model.getScore() >= 30) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
+            }
         }
     }
+
+    public void transState(){
+        mc.TransitionToState(mc.current);
+    }
+
+
 
     /**
      * Methods to calibrate sizes of pixels relative to board size
@@ -144,7 +202,6 @@ public class TetrisView implements Initializable {
      */
     @FXML
     public void paintBoard() {
-
         // Draw a rectangle around the whole screen
         gc.setStroke(Color.GREEN);
         gc.setFill(Color.GREEN);
@@ -154,6 +211,7 @@ public class TetrisView implements Initializable {
         gc.setStroke(Color.BLACK);
         int spacerY = yPixel(this.model.getBoard().getHeight() - TetrisModel.BUFFERZONE - 1);
         gc.strokeLine(0, spacerY, this.width-1, spacerY);
+
 
         // Factor a few things out to help the optimizer
         final int dx = Math.round(dX()-2);
@@ -170,6 +228,32 @@ public class TetrisView implements Initializable {
                     gc.setFill(Color.RED);
                     gc.fillRect(left+1, yPixel(y)+1, dx, dy);
                     gc.setFill(Color.GREEN);
+                }
+            }
+        }
+    }
+    //clear the second board
+    public void clearBoard() {
+        bx.setFill(Color.BLACK);
+        bx.fillRect(50, 0, this.width - 1, this.height - 1);
+    }
+
+    // print the second board
+    public void printSecondBoard(){
+        final int dx = Math.round(dX()-2);
+        final int dy = Math.round(dY()-2);
+        int bWidth = 30;
+        int x, y;
+        // Loop through and draw all the blocks; sizes of blocks are calibrated relative to screen size
+        for (x=0; x<bWidth; x++) {
+            int left = xPixel(x);	// the left pixel
+            // draw from 0 up to the col height
+            int yHeight = 30;
+            for (y=0; y<yHeight; y++) {
+                if (this.model.getBoard().getGrid(x, y)) {
+                    bx.setFill(Color.RED);
+                    bx.fillRect(left+1, yPixel(y)+1, dx, dy);;
+                    bx.setFill(Color.GREEN);
                 }
             }
         }
@@ -208,6 +292,13 @@ public class TetrisView implements Initializable {
     }
 
 
+
+    private void changeColorMode(){
+        ChangeColorMode changeColorMode = new ChangeColorMode(this);
+
+    }
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.paused = false;
@@ -219,6 +310,11 @@ public class TetrisView implements Initializable {
         canvas.setHeight(this.height);
         gc = canvas.getGraphicsContext2D();
 
+        secondCanvas.setHeight(90);
+        secondCanvas.setWidth(170);
+        bx = secondCanvas.getGraphicsContext2D();
+        g = secondCanvas.getGraphicsContext2D();
+
         final ToggleGroup toggleGroup = new ToggleGroup();
 
         pilotButtonHuman.setToggleGroup(toggleGroup);
@@ -229,6 +325,10 @@ public class TetrisView implements Initializable {
 
         toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> swapPilot(newVal));
 
+    public double getWidth(){return this.width;}
+    public double getHeight(){return this.height;}
+
+}
         //timeline structures the animation, and speed between application "ticks"
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -237,17 +337,33 @@ public class TetrisView implements Initializable {
         //configure this such that you start a new game when the user hits the newButton
         //Make sure to return the focus to the borderPane once you're done!
         newButton.setOnAction(e -> {
+            mc.current = new state.NormalLevelState();
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }else{
+                mc.sound.stop();
+                transState();
+            }
+            this.state = true;
             model.newGame();
         });
 
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
+            if(!mc.s){
+                mc.s = true;
+                transState();
+            }
+            model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
         //Make sure to return the focus to the borderPane once you're done!
         stopButton.setOnAction(e -> {
+            mc.s = false;
+            transState();
             model.stopGame();
         });
 
@@ -262,6 +378,7 @@ public class TetrisView implements Initializable {
         loadButton.setOnAction(e -> {
             createLoadView();
         });
+        //configure this such that the changeColorMode pops up when the changeColorMode is pressed.
         changeColorModebutton.setOnAction(e -> {
             changeColorMode();
         });
@@ -301,20 +418,7 @@ public class TetrisView implements Initializable {
             }
         });
 
+        transState();
         this.model.startGame(); //begin
     }
-
-
-    private void changeColorMode(){
-        ChangeColorMode changeColorMode = new ChangeColorMode(this);
-    }
-
-    private void GameInstruciton(){
-
-    }
-
-    public double getWidth(){return this.width;}
-    public double getHeight(){return this.height;}
-
 }
-

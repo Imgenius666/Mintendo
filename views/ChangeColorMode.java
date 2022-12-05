@@ -41,6 +41,7 @@ public class ChangeColorMode extends TetrisView implements Command{
     //check if change color mode has been called
     boolean called;
     Button HighContrastModeButton, StandardModeButton, EyeProtectionModeButton, CustomizeColorSchemeButton;
+    
     public ChangeColorMode(TetrisView tetrisview){
         super();
         this.tetrisView = tetrisview;
