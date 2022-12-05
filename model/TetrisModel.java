@@ -337,7 +337,6 @@ public class TetrisModel implements Serializable {
 
     }
 
-
     /**
      * Start a new game
      */

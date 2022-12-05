@@ -13,36 +13,18 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import model.TetrisModel;
 
-import javafx.application.Application;
-import javafx.beans.value.ObservableValue;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.layout.AnchorPane;
-import model.TetrisModel;
-
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.io.IOException;
-import java.net.URL;
-import java.util.Objects;
-import java.util.ResourceBundle;
-=======
 import model.TetrisPiece;
 
 import javax.imageio.ImageIO;
@@ -65,7 +47,7 @@ public class TetrisView implements Initializable {
     TetrisModel model; //reference to model
     Stage stage;
     @FXML
-    MenuItem startButton, stopButton, loadButton, saveButton, newButton, changeColorModebutton; //menu items for some functions
+    MenuItem startButton, stopButton, loadButton, saveButton, newButton; //menu items for some functions
     @FXML
     Label scoreLabel, gameModeLabel;
     @FXML
@@ -79,6 +61,8 @@ public class TetrisView implements Initializable {
     @FXML
     Canvas canvas, secondCanvas;
     AnchorPane anchorPane;
+    @FXML
+    Canvas canvas;
     @FXML
     HBox controls;
     @FXML
@@ -94,7 +78,7 @@ public class TetrisView implements Initializable {
 
     Boolean paused;
     Timeline timeline;
-    
+
     private state.MusicContext mc;
 
     private boolean state;
@@ -156,7 +140,6 @@ public class TetrisView implements Initializable {
      */
 
 
-
     private void updateScore() {
         if (i != model.getScore() + + model.getCount()){
             clearBoard();
@@ -184,16 +167,16 @@ public class TetrisView implements Initializable {
     /**
      * Methods to calibrate sizes of pixels relative to board size
      */
-    public final int yPixel(int y) {
+    private final int yPixel(int y) {
         return (int) Math.round(this.height -1 - (y+1)*dY());
     }
-    public final int xPixel(int x) {
+    private final int xPixel(int x) {
         return Math.round((x)*dX());
     }
-    public final float dX() {
+    private final float dX() {
         return( ((float)(this.width-2)) / this.model.getBoard().getWidth() );
     }
-    public final float dY() {
+    private final float dY() {
         return( ((float)(this.height-2)) / this.model.getBoard().getHeight() );
     }
 
@@ -292,13 +275,6 @@ public class TetrisView implements Initializable {
     }
 
 
-
-    private void changeColorMode(){
-        ChangeColorMode changeColorMode = new ChangeColorMode(this);
-
-    }
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.paused = false;
@@ -325,10 +301,6 @@ public class TetrisView implements Initializable {
 
         toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> swapPilot(newVal));
 
-    public double getWidth(){return this.width;}
-    public double getHeight(){return this.height;}
-
-}
         //timeline structures the animation, and speed between application "ticks"
         timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
         timeline.setCycleCount(Timeline.INDEFINITE);
@@ -377,10 +349,6 @@ public class TetrisView implements Initializable {
         //Make sure to return the focus to the borderPane once you're done!
         loadButton.setOnAction(e -> {
             createLoadView();
-        });
-        //configure this such that the changeColorMode pops up when the changeColorMode is pressed.
-        changeColorModebutton.setOnAction(e -> {
-            changeColorMode();
         });
 
         Left_movement.setOnAction(e -> {
