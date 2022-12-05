@@ -44,6 +44,7 @@ public class TetrisApp extends Application {
                 System.exit(0);
             });
             primaryStage.show();
+
         }catch(Exception e){
             e.printStackTrace();
         }

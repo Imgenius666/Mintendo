@@ -9,7 +9,6 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
-
 public class Sound {
     Long currentFrame;
     Clip clip;
@@ -46,7 +45,7 @@ public class Sound {
     {
         try
         {
-            filePath = "C:\\Users\\xiang\\Desktop\\Project\\Mintendo\\introAudio.wav";
+            filePath = "./soundfile/IntroAudio.wav";
             Sound audioPlayer = new Sound();
             audioPlayer.play();
             Scanner sc = new Scanner(System.in);
