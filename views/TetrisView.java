@@ -74,12 +74,9 @@ public class TetrisView implements Initializable {
 
     private boolean state;
 
-
-
     int pieceWidth = 25; //width of block on display
     private double width; //height and width of canvas
     private double height;
-
     public TetrisView() {
         this.model = new TetrisModel();
         this.mc = new state.MusicContext(true);
@@ -130,19 +127,17 @@ public class TetrisView implements Initializable {
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
         }
-            if (!this.paused && model.getScore() >= 30) {
-                if (state) {
-                    mc.DetermineState();
-                    state = false;
-                }
+        if (!this.paused && model.getScore() >= 30) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
             }
         }
+    }
 
     public void transState(){
         mc.TransitionToState(mc.current);
     }
-
-
 
     /**
      * Methods to calibrate sizes of pixels relative to board size
