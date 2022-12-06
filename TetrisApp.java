@@ -3,6 +3,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import model.TetrisModel;
+import views.Invoker;
 import views.TetrisView;
 
 import javafx.application.Application;

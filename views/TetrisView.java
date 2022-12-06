@@ -47,7 +47,8 @@ public class TetrisView implements Initializable {
     TetrisModel model; //reference to model
     Stage stage;
     @FXML
-    MenuItem startButton, stopButton, loadButton, saveButton, newButton, changeColorModebutton; //menu items for some functions
+    MenuItem startButton, stopButton, loadButton, saveButton, newButton, changeColorModebutton,
+            TextInstructionButton, CustomizeColorButton; //menu items for some functions
     @FXML
     Label scoreLabel, gameModeLabel;
     @FXML
@@ -67,14 +68,24 @@ public class TetrisView implements Initializable {
     @FXML
     RadioButton pilotButtonHuman, pilotButtonComputer;
 
-    Boolean paused;
+    Boolean paused, highContrast, eyeProtection, standard, customized, changeColor;
     Timeline timeline;
+    ChangeColorMode changed;
+    CustomizeColor customize;
+
+    Invoker invoker;
 
     int pieceWidth = 25; //width of block on display
     private double width; //height and width of canvas
     private double height;
     public TetrisView() {
         this.model = new TetrisModel();
+        highContrast = false;
+        eyeProtection = false;
+        standard = false;
+        changeColor = false;
+        customized = false;
+        this.invoker = new Invoker();
     }
 
     /**
@@ -105,8 +116,14 @@ public class TetrisView implements Initializable {
      * Update board (paint pieces and score info)
      */
     private void updateBoard() {
-        if (!this.paused) {
+        if (!this.paused && !changeColor) {
             paintBoard();
+            this.model.modelTick(TetrisModel.MoveType.DOWN);
+            updateScore();
+        }else if(this.customized){
+            this.customize.execute();
+        }else{
+            this.changed.execute();
             this.model.modelTick(TetrisModel.MoveType.DOWN);
             updateScore();
         }
@@ -146,8 +163,8 @@ public class TetrisView implements Initializable {
     public void paintBoard() {
 
         // Draw a rectangle around the whole screen
-        gc.setStroke(Color.GREEN);
-        gc.setFill(Color.GREEN);
+        gc.setStroke(Color.rgb(242, 244, 250));
+        gc.setFill(Color.rgb(242, 244, 250));
         gc.fillRect(0, 0, this.width-1, this.height-1);
 
         // Draw the line separating the top area on the screen
@@ -167,9 +184,9 @@ public class TetrisView implements Initializable {
             final int yHeight = this.model.getBoard().getColumnHeight(x);
             for (y=0; y<yHeight; y++) {
                 if (this.model.getBoard().getGrid(x, y)) {
-                    gc.setFill(Color.RED);
+                    gc.setFill(Color.rgb(104, 138, 237));
                     gc.fillRect(left+1, yPixel(y)+1, dx, dy);
-                    gc.setFill(Color.GREEN);
+                    gc.setFill(Color.rgb(242, 244, 250));
                 }
             }
         }
@@ -265,6 +282,14 @@ public class TetrisView implements Initializable {
         changeColorModebutton.setOnAction(e -> {
             changeColorMode();
         });
+        TextInstructionButton.setOnAction(e -> {
+            gameInstruction();
+        });
+
+        CustomizeColorButton.setOnAction(e -> {
+            customizeColor();
+            customized = true;
+        });
 
         Left_movement.setOnAction(e -> {
             model.modelTick(TetrisModel.MoveType.LEFT);
@@ -306,11 +331,15 @@ public class TetrisView implements Initializable {
 
 
     private void changeColorMode(){
-        ChangeColorMode changeColorMode = new ChangeColorMode(this);
+        this.changed = new ChangeColorMode(this);
+    }
+    private void customizeColor(){
+        this.customize = new CustomizeColor(this);
+        this.customized = true;
     }
 
-    private void GameInstruciton(){
-
+    private void gameInstruction(){
+        TextInstruction gameInstruction = new TextInstruction(this);
     }
 
     public double getWidth(){return this.width;}
