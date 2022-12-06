@@ -37,6 +37,8 @@ public class TetrisModel implements Serializable {
 
     public MusicContext mc;
 
+    private String username;
+
     public enum MoveType {
         ROTATE,
         LEFT,
@@ -67,6 +69,10 @@ public class TetrisModel implements Serializable {
         gameOn = true;
         score = 0;
         count = 0;
+    }
+
+    public void SetUser(String username) { //start game
+        this.username = username;
     }
 
     /**

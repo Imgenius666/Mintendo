@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.StageStyle;
 import model.TetrisModel;
 
 import javafx.animation.KeyFrame;
@@ -46,6 +47,7 @@ public class TetrisView implements Initializable {
     Button Left_movement, Right_movement, Rotate_movement, Down_movement;
     TetrisModel model; //reference to model
     Stage stage;
+    Color color = Color.RED;
     @FXML
     MenuItem startButton, stopButton, loadButton, saveButton, newButton; //menu items for some functions
     @FXML
@@ -60,9 +62,6 @@ public class TetrisView implements Initializable {
     BufferedImage image;
     @FXML
     Canvas canvas, secondCanvas;
-    AnchorPane anchorPane;
-    @FXML
-    Canvas canvas;
     @FXML
     HBox controls;
     @FXML
@@ -234,7 +233,7 @@ public class TetrisView implements Initializable {
             int yHeight = 30;
             for (y=0; y<yHeight; y++) {
                 if (this.model.getBoard().getGrid(x, y)) {
-                    bx.setFill(Color.RED);
+                    bx.setFill(this.color);
                     bx.fillRect(left+1, yPixel(y)+1, dx, dy);;
                     bx.setFill(Color.GREEN);
                 }
@@ -259,20 +258,17 @@ public class TetrisView implements Initializable {
     }
     //Create a new setting page
     @FXML
-    private void openSettingsPage(){
+    private void openAudioSettingsPage(){
         this.model.stopGame();
-        try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Settings.fxml"));
-            Parent root = loader.load();
-            Scene scene = new Scene(root);
-            Stage stage = new Stage();
-            stage.setTitle("Settings");
-            stage.setScene(scene);
-            stage.show();
-        }catch (Exception e) {
-            e.printStackTrace();
-        }
+
     }
+
+    @FXML
+    private void openColorSettingsPage(){
+        this.model.stopGame();
+
+    }
+
 
 
     @Override
