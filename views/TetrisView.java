@@ -29,6 +29,7 @@ import model.TetrisPiece;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.Cleaner;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -117,6 +118,8 @@ public class TetrisView implements Initializable {
     private void updateBoard() {
         if (!this.paused) {
             paintBoard();
+            clearBoard();
+            printSecondBoard();
             this.model.modelTick(TetrisModel.MoveType.DOWN);
             updateScore();
         }
@@ -128,9 +131,10 @@ public class TetrisView implements Initializable {
 
 
     private void updateScore() {
+        if (i == 0){
+            i = i + 1;
+        }
         if (i != model.getScore() + + model.getCount()){
-            clearBoard();
-            printSecondBoard();
         }
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
@@ -205,11 +209,11 @@ public class TetrisView implements Initializable {
         for (x=0; x<bWidth; x++) {
             int left = xPixel(x);	// the left pixel
             // draw from 0 up to the col height
-            int yHeight = 30;
+            final int yHeight = 50;
             for (y=0; y<yHeight; y++) {
-                if (this.model.getBoard().getGrid(x, y)) {
+                if (this.model.secondGetBoard().secondGetGrid(x, y)) {
                     bx.setFill(Color.RED);
-                    bx.fillRect(left+1, yPixel(y)+1, dx, dy);;
+                    bx.fillRect(left+40, yPixel(y), dx, dy);;
                     bx.setFill(Color.GREEN);
                 }
             }
@@ -260,8 +264,8 @@ public class TetrisView implements Initializable {
         canvas.setHeight(this.height);
         gc = canvas.getGraphicsContext2D();
 
-        secondCanvas.setHeight(90);
-        secondCanvas.setWidth(170);
+        secondCanvas.setHeight(100);
+        secondCanvas.setWidth(200);
         bx = secondCanvas.getGraphicsContext2D();
         g = secondCanvas.getGraphicsContext2D();
 

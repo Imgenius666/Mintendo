@@ -75,7 +75,7 @@
                      </BorderPane.margin></Canvas>
                </center>
                <top>
-                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="This Piece" BorderPane.alignment="CENTER">
+                  <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Next Piece" BorderPane.alignment="CENTER">
                      <font>
                         <Font size="24.0" />
                      </font>

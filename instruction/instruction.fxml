@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="450.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="instruction.InstructionController">
+   <children>
+      <Text layoutX="14.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Tetris is a puzzle game that is played on a grid called the Matrix. Tetrimino shapes drop one-by-one from the top of the Matrix to the bottom. These Tetriminos come in seven different shapes, each represented by a different letter of the alphabet. To excel at Tetris, you must arrange these Tetriminos in such a way that they form solid horizontal lines, whereupon which these lines diTetris is a puzzle game that is played on a grid called the Matrix. Tetrimino shapes drop one-by-one from the top of the Matrix to the bottom. These Tetriminos come in seven different shapes, each represented by a different letter of the alphabet. To excel at Tetris, you must arrange these Tetriminos in such a way that they form solid horizontal lines, whereupon which these lines disappear from the Matrix.sappear from the Matrix." wrappingWidth="333.9195556640625">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Button fx:id="Start_Audio" layoutX="399.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="132.0" text="Start Audio" />
+      <Button fx:id="Stop_Audio" layoutX="399.0" layoutY="95.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="132.0" text="Stop Audio" />
+      <Button fx:id="Pause_Audio" layoutX="399.0" layoutY="185.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="132.0" text="Pause Audio" />
+      <Button fx:id="Resume_Audio" layoutX="399.0" layoutY="279.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="132.0" text="Resume Audio" />
+      <Button fx:id="Restart_Audio" layoutX="399.0" layoutY="370.0" mnemonicParsing="false" prefHeight="80.0" prefWidth="132.0" text="Restart Audio" />
+   </children>
+</AnchorPane>

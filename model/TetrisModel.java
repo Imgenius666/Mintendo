@@ -1,6 +1,9 @@
 package model;
 
+import views.TetrisView;
+
 import java.io.*;
+import java.util.LinkedList;
 import java.util.Random;
 
 /** Represents a Tetris Model for Tetris.  
@@ -12,10 +15,12 @@ public class TetrisModel implements Serializable {
     public static final int HEIGHT = 20; //height of the board in blocks
     public static final int BUFFERZONE = 4; //space at the top
 
-    protected TetrisBoard board;  // Board data structure
+    protected TetrisBoard board, secondBoard;  // Board data structure
     protected TetrisPiece[] pieces; // Pieces to be places on the board
     protected TetrisPiece currentPiece; //Piece we are currently placing
     protected TetrisPiece newPiece; //next piece to be placed
+
+    protected TetrisPiece nextNextPiece;
     protected int count;		 // how many pieces played so far
     protected int score; //the player's score
 
@@ -28,6 +33,7 @@ public class TetrisModel implements Serializable {
 
     private boolean autoPilotMode; //are we in autopilot mode?
     protected TetrisPilot pilot;
+    protected int number;
 
     public enum MoveType {
         ROTATE,
@@ -46,6 +52,8 @@ public class TetrisModel implements Serializable {
         autoPilotMode = false;
         gameOn = false;
         pilot = new AutoPilot();
+        secondBoard = new TetrisBoard(WIDTH, HEIGHT + BUFFERZONE);
+        number = 3;
     }
 
 
@@ -54,7 +62,10 @@ public class TetrisModel implements Serializable {
      */
     public void startGame() { //start game
         random = new Random();
-        addNewPiece();
+        int pieceNum;
+        pieceNum = (int) (pieces.length * random.nextDouble());
+        TetrisPiece piece = pieces[pieceNum];
+        addNewPiece(piece);
         gameOn = true;
         score = 0;
         count = 0;
@@ -69,6 +80,9 @@ public class TetrisModel implements Serializable {
         return this.board;
     }
 
+    public TetrisBoard secondGetBoard() {
+        return this.secondBoard;
+    }
     /**
      * Compute New Position of piece in play based on move type
      * 
@@ -113,15 +127,16 @@ public class TetrisModel implements Serializable {
     /**
      * Put new piece in play on board 
      */
-    public void addNewPiece() {
+    public void addNewPiece(TetrisPiece piece) {
         count++;
         score++;
 
         // commit things the way they are
         board.commit();
+        secondBoard.secondCommited();
         currentPiece = null;
 
-        TetrisPiece piece = pickNextPiece();
+        //TetrisPiece piece = pickNextPiece();
 
         // Center it up at the top
         int px = (board.getWidth() - piece.getWidth())/2;
@@ -138,12 +153,12 @@ public class TetrisModel implements Serializable {
     /**
      * Pick next piece to put in play on board 
      */
-    private TetrisPiece pickNextPiece() {
-        int pieceNum;
-        pieceNum = (int) (pieces.length * random.nextDouble());
-        TetrisPiece piece	 = pieces[pieceNum];
-        return(piece);
-    }
+//    private TetrisPiece pickNextPiece() {
+//        int pieceNum;
+//        pieceNum = (int) (pieces.length * random.nextDouble());
+//        TetrisPiece piece = pieces[pieceNum];
+//        return(piece);
+//    }
 
     /**
      * Attempt to set the piece at a given board position
@@ -156,7 +171,6 @@ public class TetrisModel implements Serializable {
      */
     public int setCurrent(TetrisPiece piece, int x, int y) {
         int result = board.placePiece(piece, x, y);
-
         if (result <= TetrisBoard.ADD_ROW_FILLED) { // SUCCESS
             this.currentPiece = piece;
             this.currentX = x;
@@ -255,16 +269,15 @@ public class TetrisModel implements Serializable {
     }
 
     /**
-     * Execute a given move.  This will compute the new position of the active piece, 
+     * Execute a given move.  This will compute the new position of the active piece,
      * set the piece to this location if possible.  If lines are completed
      * as a result of the move, the lines will be cleared from the board,
      * and the board will be updated.  Scores will be added to the player's
      * total based on the number of rows cleared.
-     * 
+     *
      * @param verb the type of move to execute
      */
     private void executeMove(MoveType verb) {
-
         if (currentPiece != null) {
             board.undo();	// remove the piece from its old position
         }
@@ -301,7 +314,15 @@ public class TetrisModel implements Serializable {
 
             // Otherwise, add a new piece and keep playing
             else {
-                addNewPiece();
+                int secondPieceNum = (int) (pieces.length * random.nextDouble());
+                TetrisPiece piece = pieces[number];
+                TetrisPiece secondPiece = pieces[secondPieceNum];
+                secondBoard.secondPlacePiece(secondPiece, 30, 30);
+                int px = (secondBoard.getWidth() - piece.getWidth())/2;
+                int py = secondBoard.getHeight() - piece.getHeight();
+                secondBoard.secondPlacePiece(secondPiece, px, py);
+                addNewPiece(piece);
+                this.number = secondPieceNum;
             }
         }
 
@@ -312,6 +333,7 @@ public class TetrisModel implements Serializable {
      */
     public void newGame() {
         this.board.newGame();
+        this.secondBoard.newGame();
         startGame();
     }
 

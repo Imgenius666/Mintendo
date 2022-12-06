@@ -10,8 +10,8 @@ import java.util.Arrays;
 public class TetrisBoard implements Serializable{
     private int width; //board height and width
     private int height;
-    protected boolean[][] tetrisGrid; //board grid
-    boolean committed; //indicates if the board is in a 'committed' state, meaning can't undo!
+    protected boolean[][] tetrisGrid, secondTetrisGrid; //board grid
+    boolean committed, secondCommited; //indicates if the board is in a 'committed' state, meaning can't undo!
 
     //In your implementation, you'll want to keep counts of filled grid positions in each column.
     //A completely filled column means the game is over!
@@ -42,7 +42,7 @@ public class TetrisBoard implements Serializable{
         width = aWidth;
         height = aHeight;
         tetrisGrid = new boolean[width][height];
-
+        secondTetrisGrid = new boolean[width][height];
         colCounts = new int[width];
         rowCounts = new int[height];
 
@@ -61,9 +61,15 @@ public class TetrisBoard implements Serializable{
                 tetrisGrid[x][y] = false;
                 }
             }
+        for (int a = 0; a < secondTetrisGrid.length; a++) {
+            for (int b = 0; b < secondTetrisGrid[a].length; b++) {
+                secondTetrisGrid[a][b] = false;
+            }
+        }
         Arrays.fill(colCounts, 0);
         Arrays.fill(rowCounts, 0);
         committed = true;
+        secondCommited = true;
     }
 
     /**
@@ -124,6 +130,11 @@ public class TetrisBoard implements Serializable{
      */
     public boolean getGrid(int x, int y) {
         if (x >= width || x < 0 || y >= height || y < 0 || tetrisGrid[x][y])
+            return true;
+        return false;
+    }
+    public boolean secondGetGrid(int x, int y) {
+        if (x >= width || x < 0 || y >= height || y < 0 || secondTetrisGrid[x][y])
             return true;
         return false;
     }
@@ -189,6 +200,32 @@ public class TetrisBoard implements Serializable{
             tetrisGrid[x_][y_] = true;
         }
         makeHeightAndWidthArrays();
+        for (int i = 0; i < height; i ++){
+            if (rowCounts[i] == width){
+                return ADD_ROW_FILLED;
+            }
+        }
+        return ADD_OK;
+    }
+    public int secondPlacePiece(TetrisPiece piece, int x, int y) {
+        for (int a = 0; a < secondTetrisGrid.length; a++) {
+            for (int b = 0; b < secondTetrisGrid[a].length; b++) {
+                secondTetrisGrid[a][b] = false;
+            }
+        }
+        for (TetrisPoint points: piece.getBody()){
+            int x_ = x + points.x;
+            int y_ = y + points.y;
+            if (x_ < 0 || x_ >= width || y_ < 0 || y_ >= height){
+                undo();
+                return ADD_OUT_BOUNDS;
+            }
+            if (secondGetGrid(x_, y_)){
+                return ADD_BAD;
+            }
+            secondTetrisGrid[x_][y_] = true;
+        }
+        secondMakeHeightAndWidthArrays();
         for (int i = 0; i < height; i ++){
             if (rowCounts[i] == width){
                 return ADD_ROW_FILLED;
@@ -274,7 +311,9 @@ public class TetrisBoard implements Serializable{
     public void commit() {
         committed = true;
     }
-
+    public void secondCommited(){
+        secondCommited = true;
+    }
     /**
      * Fills heightsOfCols[] and widthOfRows[].  Useful helper to support clearing rows and placing pieces.
      */
@@ -292,6 +331,21 @@ public class TetrisBoard implements Serializable{
             }
         }
     }
+    private void secondMakeHeightAndWidthArrays() {
+
+        Arrays.fill(colCounts, 0);
+        Arrays.fill(rowCounts, 0);
+
+        for (int x = 0; x < secondTetrisGrid.length; x++) {
+            for (int y = 0; y < secondTetrisGrid[x].length; y++) {
+                if (secondTetrisGrid[x][y]) { //means is not an empty cell
+                    colCounts[x] = y + 1; //these tallies can be useful when clearing rows or placing pieces
+                    rowCounts[y]++;
+                }
+            }
+        }
+    }
+
 
     /**
      * Print the board
