@@ -129,7 +129,6 @@ public class TetrisView implements Initializable {
      * Update score on UI
      */
 
-
     private void updateScore() {
         if (i == 0){
             i = i + 1;
@@ -264,6 +263,7 @@ public class TetrisView implements Initializable {
         canvas.setHeight(this.height);
         gc = canvas.getGraphicsContext2D();
 
+        //add second canvas
         secondCanvas.setHeight(100);
         secondCanvas.setWidth(200);
         bx = secondCanvas.getGraphicsContext2D();
