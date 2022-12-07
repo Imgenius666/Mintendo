@@ -45,7 +45,7 @@ public class Sound {
     {
         try
         {
-            filePath = "C:\\Users\\xiang\\Desktop\\Project\\Mintendo\\introAudio.wav";
+            filePath = "./soundfile/IntroAudio.wav";
             Sound audioPlayer = new Sound();
             audioPlayer.play();
             Scanner sc = new Scanner(System.in);
