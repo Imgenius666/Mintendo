@@ -191,11 +191,14 @@
                   <CheckMenuItem fx:id="soundeffectButton" mnemonicParsing="false" text="Soundeffect" />
                   <CheckMenuItem fx:id="backgroundButton"  mnemonicParsing="false" text="Background Music" />
                   <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
+                   <MenuItem fx:id="changeColorModebutton" mnemonicParsing="false" text="Change Color Mode" />
+                   <MenuItem fx:id="CustomizeColorButton" mnemonicParsing="false" text="Customize Color" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">
                <items>
                   <MenuItem mnemonicParsing="false" text="About" />
+                   <MenuItem fx:id="TextInstructionButton" mnemonicParsing="false" text="Game Instruction(text)" />
                </items>
             </Menu>
          </menus>
