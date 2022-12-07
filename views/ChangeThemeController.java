@@ -14,14 +14,13 @@ public class ChangeThemeController implements Initializable {
     private ListView<String> theme_view;
     TetrisView view;
     String[] themes = {"8-bit", "Piano", "Orchestra","Western"};
+    //pushes the selected theme into the list view.
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         theme_view.getItems().addAll(themes);
         theme_view.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
     }
-    public void setView(TetrisView view) {
-        this.view = view;
-    }
+
     @FXML
     public void confirm(){
         int val = theme_view.getSelectionModel().getSelectedIndex();
