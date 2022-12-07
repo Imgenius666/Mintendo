@@ -34,12 +34,14 @@ public class LoginController{
 
     final String user_name_salt = "kIwAldqhsyTATTA";
     final String user_password_salt = "T5nOjEFdT0uQxBD9VWGE";
+    // Encryption algorithm using SHA-256
     // Algorithm taken from https://en.wikipedia.org/wiki/Cryptographic_hash_function
     public static byte[] getSHACode(String ipt) throws NoSuchAlgorithmException
     {
         MessageDigest md = MessageDigest.getInstance("SHA-256");
         return md.digest(ipt.getBytes(StandardCharsets.UTF_8));
     }
+    // Encryption algorithm using SHA-256
     // Algorithm taken from https://en.wikipedia.org/wiki/Cryptographic_hash_function
     public static String toHexString(byte[] hash)
     {
@@ -51,7 +53,9 @@ public class LoginController{
         }
         return hexString.toString();
     }
-
+    /*
+    A function that alerts the user to tell that the user is not exist in the stored files.
+     */
     private void UsernameNotExistAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Invalid Username");
@@ -153,7 +157,10 @@ public class LoginController{
         }
 
     }
-
+    /*
+    If the login is successful, load the game file and start the game.
+    The previous page(login page) will then be closed.
+     */
     @FXML
     public void login_successful(String username){
         try{

@@ -178,6 +178,9 @@ public class RegisterController implements Initializable {
             e.printStackTrace();
         }
     }
+    /*
+    User can click this button to go back to the original function.
+     */
     @FXML
     public void go_back() {
         try{
@@ -194,7 +197,9 @@ public class RegisterController implements Initializable {
             e.printStackTrace();
         }
     }
-
+    /*
+        Sets the message on the label.
+    */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.Note.setText("""

@@ -60,6 +60,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
                    <MenuItem fx:id="changeColorModebutton" mnemonicParsing="false" text="Change Color Mode" />
                    <MenuItem fx:id="CustomizeColorButton" mnemonicParsing="false" text="Customize Color" />
+                  <MenuItem mnemonicParsing="false" onAction="#openAudioSettingsPage" text="Change theme" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">
