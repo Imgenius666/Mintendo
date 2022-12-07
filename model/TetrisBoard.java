@@ -133,6 +133,7 @@ public class TetrisBoard implements Serializable{
             return true;
         return false;
     }
+    // get the second board grid
     public boolean secondGetGrid(int x, int y) {
         if (x >= width || x < 0 || y >= height || y < 0 || secondTetrisGrid[x][y])
             return true;
@@ -207,6 +208,8 @@ public class TetrisBoard implements Serializable{
         }
         return ADD_OK;
     }
+
+    //add second piece to second board
     public int secondPlacePiece(TetrisPiece piece, int x, int y) {
         for (int a = 0; a < secondTetrisGrid.length; a++) {
             for (int b = 0; b < secondTetrisGrid[a].length; b++) {
@@ -331,6 +334,8 @@ public class TetrisBoard implements Serializable{
             }
         }
     }
+
+    //find second board make height and width arrays
     private void secondMakeHeightAndWidthArrays() {
 
         Arrays.fill(colCounts, 0);

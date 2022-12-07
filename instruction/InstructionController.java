@@ -9,12 +9,16 @@ import java.io.IOException;
 
 public class InstructionController {
     @FXML
+    //Buttons to control the audio
     Button Start_Audio, Pause_Audio, Resume_Audio, Stop_Audio, Restart_Audio;
+    // sound
     Sound sound;
+    // Constructor for Sound
     public void Sound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
         this.sound = new Sound();
 
     }
+    // initialize
     public void initialize(){
         Start_Audio.setOnAction(e -> {
             sound.play();
@@ -36,9 +40,7 @@ public class InstructionController {
         Resume_Audio.setOnAction(e -> {
             try {
                 sound.resumeAudio();
-            } catch (UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
+            } catch (UnsupportedAudioFileException | IOException ex) {
                 throw new RuntimeException(ex);
             } catch (LineUnavailableException ex) {
                 throw new RuntimeException(ex);
