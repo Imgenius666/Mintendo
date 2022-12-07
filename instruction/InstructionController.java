@@ -29,31 +29,21 @@ public class InstructionController {
         Restart_Audio.setOnAction(e -> {
             try {
                 sound.restart();
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            } catch (UnsupportedAudioFileException ex) {
+            } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
                 throw new RuntimeException(ex);
             }
         });
         Resume_Audio.setOnAction(e -> {
             try {
                 sound.resumeAudio();
-            } catch (UnsupportedAudioFileException | IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
         });
         Stop_Audio.setOnAction(e -> {
             try {
                 sound.stop();
-            } catch (UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            } catch (IOException ex) {
-                throw new RuntimeException(ex);
-            } catch (LineUnavailableException ex) {
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
                 throw new RuntimeException(ex);
             }
         });
