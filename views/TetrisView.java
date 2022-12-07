@@ -2,6 +2,7 @@ package views;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -66,7 +67,7 @@ public class TetrisView implements Initializable {
     @FXML
     HBox controls;
     @FXML
-    VBox vBox, scoreBox;
+    VBox vBox;
     @FXML
     GraphicsContext gc;
     @FXML
@@ -101,7 +102,7 @@ public class TetrisView implements Initializable {
 
     public TetrisView() {
         this.model = new TetrisModel();
-        this.mc = new state.MusicContext(true);
+        this.mc = new state.MusicContext(true,0);
         this.state = true;
         this.silentstate = false;
 
@@ -112,6 +113,15 @@ public class TetrisView implements Initializable {
         customized = false;
         this.invoker = new Invoker();
 
+    }
+    /*
+    Set the music, val is the index indicating with music to play.
+     */
+    public void setMC(int val){
+        this.mc = new state.MusicContext(true, val);
+        this.mc.s = true;
+        transState();
+        model.resume();
     }
 
     /**
@@ -306,6 +316,34 @@ public class TetrisView implements Initializable {
         }
     }
 
+    /*
+    Controller method to let the user enter the theme setting by clicking on the button.
+    At that time, the current music will be stopped.
+     */
+    @FXML
+    private void openAudioSettingsPage(){
+        this.model.stopGame();
+        try{
+            this.mc.s = false;
+            transState();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("ChangeTheme.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Theme settings");
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setOnCloseRequest(event -> {
+                Platform.exit();
+                System.exit(0);
+            });
+            stage.show();
+            ChangeThemeController controller = loader.getController();
+            controller.view = this;
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -408,11 +446,7 @@ public class TetrisView implements Initializable {
         //if the soundeffectButton is selected, the sound effect will be turned off,
         //if the soundeffectButton is unselected, the sound effect sound will be turned on.
         soundeffectButton.setOnAction(e -> {
-            if(soundeffectButton.isSelected()) {
-                model.det = false;
-            }else{
-                model.det = true;
-            }
+            model.det = !soundeffectButton.isSelected();
         });
         //configure this such that the save view pops up when the saveButton is pressed.
         //Make sure to return the focus to the borderPane once you're done!
