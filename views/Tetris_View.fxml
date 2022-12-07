@@ -57,7 +57,7 @@
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Settings">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
+                  <MenuItem mnemonicParsing="false" onAction="#openAudioSettingsPage" text="ChangeTheme" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">

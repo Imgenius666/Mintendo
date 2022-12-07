@@ -9,15 +9,17 @@ public class MusicContext {
     public MusicState current;
 
     public boolean s;
-
-    public MusicContext(boolean s) {
+    public int theme_idx;
+    public MusicContext(boolean s, int theme_idx) {
         this.sound = new Sound2();
         this.s = s;
+        this.theme_idx = theme_idx;
         this.current = new NormalLevelState();
     }
+
     public void TransitionToState(MusicState state){
         current = state;
-        current.EnterState(this);
+        current.EnterState(this, theme_idx);
     }
 
     public void DetermineState(){

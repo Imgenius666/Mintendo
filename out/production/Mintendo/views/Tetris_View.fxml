@@ -57,7 +57,7 @@
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Settings">
                <items>
-                  <MenuItem mnemonicParsing="false" onAction="#openSettingsPage" text="Adjust Piece" />
+                  <MenuItem mnemonicParsing="false" onAction="#openAudioSettingsPage" text="ChangeTheme" />
                </items>
             </Menu>
             <Menu mnemonicParsing="false" style="-fx-font-size: 20;" text="Help">
@@ -86,16 +86,13 @@
                   <Font size="16.0" />
                </font>
                <toggleGroup>
-                  <ToggleGroup fx:id="toggleGroup" />
+                  <ToggleGroup fx:id="ToggleGroup" />
                </toggleGroup>
             </RadioButton>
-            <RadioButton fx:id="pilotButtonComputer" layoutX="36.0" layoutY="192.0" mnemonicParsing="false" style="-fx-text-fill: #e8e6e3;" text="Computer (Default)">
+            <RadioButton fx:id="pilotButtonComputer" layoutX="36.0" layoutY="192.0" mnemonicParsing="false" style="-fx-text-fill: #e8e6e3;" text="Computer (Default)" toggleGroup="$ToggleGroup">
                <font>
                   <Font size="16.0" />
                </font>
-               <toggleGroup>
-                  <ToggleGroup fx:id="toggleGroup" />
-               </toggleGroup>
             </RadioButton>
             <BorderPane fx:id="secondBorderPane" layoutX="25.0" layoutY="227.0" prefHeight="200.0" prefWidth="200.0">
                <top>

@@ -7,15 +7,16 @@ public class HighLevelState implements MusicState {
     }
 
     @Override
-    public void EnterState(MusicContext mc) {
+    public void EnterState(MusicContext mc, int theme_idx) {
         if (mc.s) {
-            mc.sound.setFile(6);
+            mc.sound.setThemesFile(theme_idx*2);
             mc.sound.play();
             mc.sound.loop();
         } else {
             mc.sound.stop();
         }
     }
+
     public String toString(){
         return "Highlevel State";
     }

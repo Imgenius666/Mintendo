@@ -25,7 +25,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class LoginController{
-    TetrisModel model;;
+    TetrisModel model;
     Stage stage;
     @FXML
     private Button LoginButton, RegisterButton;
