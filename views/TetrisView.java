@@ -47,7 +47,9 @@ public class TetrisView implements Initializable {
     TetrisModel model; //reference to model
     Stage stage;
     @FXML
-    MenuItem startButton, stopButton, loadButton, saveButton, newButton; //menu items for some functions
+    MenuItem startButton, stopButton, loadButton, saveButton, newButton;//menu items for some functions
+    @FXML
+    CheckMenuItem backgroundButton, soundeffectButton;
     @FXML
     Label scoreLabel, gameModeLabel;
     @FXML
@@ -83,8 +85,19 @@ public class TetrisView implements Initializable {
     private double height;
     private TetrisPiece piece;
 
+    private state.MusicContext mc;
+
+    //Determine whether in the highlevel state.
+    public boolean state;
+    //Determine whether the silent button was clicked.
+    public boolean silentstate;
+
+
     public TetrisView() {
         this.model = new TetrisModel();
+        this.mc = new state.MusicContext(true);
+        this.state = true;
+        this.silentstate = false;
 
     }
 
@@ -127,6 +140,10 @@ public class TetrisView implements Initializable {
 
     /**
      * Update score on UI
+     * if the score is over 30, the variable mc will call the DetermineState,
+     *      and transfer the state to highlevel mode,
+     *      the state will become false,
+     *      the speed will increase.
      */
 
     private void updateScore() {
@@ -138,7 +155,20 @@ public class TetrisView implements Initializable {
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
         }
+        if (!this.paused && model.getScore() >= 30) {
+            if (state) {
+                mc.DetermineState();
+                state = false;
+                double val = slider.getValue();
+                timeline.setRate(val * 5 / 100);
+            }
+        }
         i = model.getScore() + model.getCount();
+    }
+
+    //call the TransitionToState and play or stop the sound.
+    public void transState(){
+        mc.TransitionToState(mc.current);
     }
 
     /**
@@ -286,22 +316,79 @@ public class TetrisView implements Initializable {
 
         //configure this such that you start a new game when the user hits the newButton
         //Make sure to return the focus to the borderPane once you're done!
+
+        //if silentstate is false, set the current state to normalLevelState
+        //if mc.s is false, turn on the music
+        //if mc.s is true, turn off the music.
+        //set the speed to the normal speed.
         newButton.setOnAction(e -> {
+            if(!silentstate) {
+                mc.current = new state.NormalLevelState();
+                if (!mc.s) {
+                    mc.s = true;
+                    transState();
+                } else {
+                    mc.sound.stop();
+                    transState();
+                }
+                this.state = true;
+            }
+            double val = slider.getValue();
+            timeline.setRate(val * 3 / 100);
             model.newGame();
         });
 
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
+        //if silentstate is false and the mc.s is false,
+        //play the music and set mc.s is true.
         startButton.setOnAction(e -> {
-            //model.resume();
+            if(!silentstate){
+                if(!mc.s){
+                    mc.s = true;
+                    transState();
+                }
+            }
+            model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
         //Make sure to return the focus to the borderPane once you're done!
+        //if the silentstate is false, set the mc.s is false,
+        //and trun off the music.
         stopButton.setOnAction(e -> {
+            if(!silentstate) {
+                mc.s = false;
+                transState();
+            }
             model.stopGame();
         });
 
+        //if the backgroundButton is selected, the slientstate is true,
+        // and the background sound will be turned off.
+        //if the backgroundButton is unselected,
+        // the silentstate is false,
+        // the background sound will be turned on.
+        backgroundButton.setOnAction(e -> {
+            if(backgroundButton.isSelected()){
+                silentstate = true;
+                mc.s = false;
+                transState();
+            }else {
+                silentstate = false;
+                mc.s = true;
+                transState();
+            }
+        });
+        //if the soundeffectButton is selected, the sound effect will be turned off,
+        //if the soundeffectButton is unselected, the sound effect sound will be turned on.
+        soundeffectButton.setOnAction(e -> {
+            if(soundeffectButton.isSelected()) {
+                model.det = false;
+            }else{
+                model.det = true;
+            }
+        });
         //configure this such that the save view pops up when the saveButton is pressed.
         //Make sure to return the focus to the borderPane once you're done!
         saveButton.setOnAction(e -> {
@@ -348,7 +435,8 @@ public class TetrisView implements Initializable {
                 case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
             }
         });
-
+        //play the sound
+        transState();
         this.model.startGame(); //begin
     }
 }
