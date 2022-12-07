@@ -61,6 +61,8 @@ public class ChangeColorMode extends TetrisView implements Command{
         Scene dialogScene = new Scene(dialogVbox, 400, 300);
         dialog.setScene(dialogScene);
         dialog.show();
+
+        //Set on action for these button
         StandardModeButton.setOnAction(e -> {
             standardMode();
         });
@@ -84,6 +86,7 @@ public class ChangeColorMode extends TetrisView implements Command{
 
     @Override
     public void execute() {
+        //Deciding 
         if(this.tetrisView.highContrast){
             highContrastMode();
         }

@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Invoker{
 
-    Queue<Command> commandQueue;
+    PriorityQueue<Command> commandQueue;
 
         public Invoker(){
             commandQueue = new PriorityQueue<>();
@@ -15,7 +15,8 @@ public class Invoker{
 
         public void execute(){
             if(commandQueue.isEmpty()) return;
-            commandQueue.remove();
+            Command c = commandQueue.remove();
+            c.execute();
         }
 
 

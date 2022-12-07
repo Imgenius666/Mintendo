@@ -13,9 +13,6 @@ public class TextInstruction extends TetrisView implements Command {
     public TextInstruction(TetrisView tetrisview) {
         super();
         this.tetrisView = tetrisview;
-
-
-        //Pausing the current scene, creating new stage
         tetrisView.paused = true;
         Text text = new Text("Tetris has very simple rules: \n" +
                 "You can only move the pieces in specific ways; \n " +
@@ -30,10 +27,12 @@ public class TextInstruction extends TetrisView implements Command {
         priStage.setScene(scene);
         priStage.setTitle("Game Instruction");
         priStage.show();
+        tetrisView.paused = false;
     }
 
     @Override
     public void execute() {
+        //Pausing the current scene, creating new stage
 
     }
 }

@@ -260,6 +260,7 @@ public class TetrisView implements Initializable {
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
         startButton.setOnAction(e -> {
+            model.startGame();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
