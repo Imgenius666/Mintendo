@@ -7,7 +7,7 @@ import state.NormalLevelState;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class StateTests {
-
+    // Test whether the music can play or not.
     @Test
     void testplay(){
         MusicContext mc1 = new MusicContext(true);
@@ -24,7 +24,7 @@ public class StateTests {
         assertEquals(false, mc2.sound.det);
 
     }
-
+    //Test whether the transfer can work or not.
     @Test
     void testStateTransfer(){
         MusicContext mc = new MusicContext(true);

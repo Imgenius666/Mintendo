@@ -10,6 +10,7 @@ public class Sound2 {
 
     public Clip clip;
     URL soundURL[] = new URL[30];
+    //determine whether the sound is play or not.
     public boolean det;
 
     public Sound2() {
@@ -22,6 +23,7 @@ public class Sound2 {
         soundURL[5] = getClass().getResource("/soundfile/unbelievable.wav");
         soundURL[6] = getClass().getResource("/soundfile/tetrishighlevel1.wav");
         soundURL[7] = getClass().getResource("/soundfile/gameover.wav");
+        soundURL[8] = getClass().getResource("/soundfile/highlevelmode.wav");
         this.det = true;
     }
 
@@ -35,7 +37,7 @@ public class Sound2 {
 
         }
     }
-
+    //play music.
     public void play() {
         try {
             clip.start();
@@ -47,11 +49,12 @@ public class Sound2 {
 
 
     }
-
+    //repeat the music.
     public void loop() {
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
+    //stop the music.
     public void stop() {
         try {
             clip.stop();

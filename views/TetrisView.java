@@ -1,39 +1,39 @@
 package views;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 
+import javafx.application.Application;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
-
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import model.TetrisModel;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import model.TetrisPiece;
 
-import javax.imageio.ImageIO;
-import java.io.File;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
-
-import static model.TetrisPiece.SQUARE_STR;
 
 
 /**
@@ -47,19 +47,17 @@ public class TetrisView implements Initializable {
     TetrisModel model; //reference to model
     Stage stage;
     @FXML
-    MenuItem startButton, stopButton, loadButton, saveButton, newButton; //menu items for some functions
+    MenuItem startButton, stopButton, loadButton, saveButton, newButton;//menu items for some functions
+    @FXML
+    CheckMenuItem backgroundButton, soundeffectButton;
+
     @FXML
     Label scoreLabel, gameModeLabel;
     @FXML
     Slider slider;
     @FXML
-    BorderPane borderPane, secondBorderPane;
+    BorderPane borderPane;
     @FXML
-    AnchorPane anchorPane;
-    @FXML
-    BufferedImage image;
-    @FXML
-    Canvas canvas, secondCanvas;
     AnchorPane anchorPane;
     @FXML
     Canvas canvas;
@@ -68,37 +66,34 @@ public class TetrisView implements Initializable {
     @FXML
     VBox vBox, scoreBox;
     @FXML
-    GraphicsContext gc;
-    @FXML
-    GraphicsContext bx;
-    @FXML
-    GraphicsContext g; //the graphics context will be linked to the canvas
+    GraphicsContext gc; //the graphics context will be linked to the canvas
     @FXML
     RadioButton pilotButtonHuman, pilotButtonComputer;
+
 
     Boolean paused;
     Timeline timeline;
 
     private state.MusicContext mc;
 
-    private boolean state;
+    //Determine whether in the highlevel state.
+    public boolean state;
+    //Determine whether the silent button was clicked.
+    public boolean silentstate;
+
 
 
 
     int pieceWidth = 25; //width of block on display
-
-    int i = 0;
     private double width; //height and width of canvas
     private double height;
-    private TetrisPiece piece;
-
     public TetrisView() {
         this.model = new TetrisModel();
-
         this.mc = new state.MusicContext(true);
         this.state = true;
+        this.silentstate = false;
 
-    }
+        }
 
     /**
      * Initialize interface
@@ -127,7 +122,7 @@ public class TetrisView implements Initializable {
     /**
      * Update board (paint pieces and score info)
      */
-    private void updateBoard() {
+    public void updateBoard() {
         if (!this.paused) {
             paintBoard();
             this.model.modelTick(TetrisModel.MoveType.DOWN);
@@ -137,32 +132,28 @@ public class TetrisView implements Initializable {
 
     /**
      * Update score on UI
+     * if the score is over 30, the variable mc will call the DetermineState,
+     * and transfer the state to highlevel mode,
+     * the state will become false,
+     * the speed will increase.
      */
-
-
     private void updateScore() {
-        if (i != model.getScore() + + model.getCount()){
-            clearBoard();
-            printSecondBoard();
-        }
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
-
         }
-
         if (!this.paused && model.getScore() >= 30) {
             if (state) {
                 mc.DetermineState();
                 state = false;
+                double val = slider.getValue();
+                timeline.setRate(val * 5 / 100);
             }
         }
     }
-
+    //call the TransitionToState and play or stop the sound.
     public void transState(){
         mc.TransitionToState(mc.current);
     }
-
-
 
     /**
      * Methods to calibrate sizes of pixels relative to board size
@@ -185,6 +176,7 @@ public class TetrisView implements Initializable {
      */
     @FXML
     public void paintBoard() {
+
         // Draw a rectangle around the whole screen
         gc.setStroke(Color.GREEN);
         gc.setFill(Color.GREEN);
@@ -194,7 +186,6 @@ public class TetrisView implements Initializable {
         gc.setStroke(Color.BLACK);
         int spacerY = yPixel(this.model.getBoard().getHeight() - TetrisModel.BUFFERZONE - 1);
         gc.strokeLine(0, spacerY, this.width-1, spacerY);
-
 
         // Factor a few things out to help the optimizer
         final int dx = Math.round(dX()-2);
@@ -211,32 +202,6 @@ public class TetrisView implements Initializable {
                     gc.setFill(Color.RED);
                     gc.fillRect(left+1, yPixel(y)+1, dx, dy);
                     gc.setFill(Color.GREEN);
-                }
-            }
-        }
-    }
-    //clear the second board
-    public void clearBoard() {
-        bx.setFill(Color.BLACK);
-        bx.fillRect(50, 0, this.width - 1, this.height - 1);
-    }
-
-    // print the second board
-    public void printSecondBoard(){
-        final int dx = Math.round(dX()-2);
-        final int dy = Math.round(dY()-2);
-        int bWidth = 30;
-        int x, y;
-        // Loop through and draw all the blocks; sizes of blocks are calibrated relative to screen size
-        for (x=0; x<bWidth; x++) {
-            int left = xPixel(x);	// the left pixel
-            // draw from 0 up to the col height
-            int yHeight = 30;
-            for (y=0; y<yHeight; y++) {
-                if (this.model.getBoard().getGrid(x, y)) {
-                    bx.setFill(Color.RED);
-                    bx.fillRect(left+1, yPixel(y)+1, dx, dy);;
-                    bx.setFill(Color.GREEN);
                 }
             }
         }
@@ -286,11 +251,6 @@ public class TetrisView implements Initializable {
         canvas.setHeight(this.height);
         gc = canvas.getGraphicsContext2D();
 
-        secondCanvas.setHeight(90);
-        secondCanvas.setWidth(170);
-        bx = secondCanvas.getGraphicsContext2D();
-        g = secondCanvas.getGraphicsContext2D();
-
         final ToggleGroup toggleGroup = new ToggleGroup();
 
         pilotButtonHuman.setToggleGroup(toggleGroup);
@@ -302,40 +262,58 @@ public class TetrisView implements Initializable {
         toggleGroup.selectedToggleProperty().addListener((observable, oldVal, newVal) -> swapPilot(newVal));
 
         //timeline structures the animation, and speed between application "ticks"
-        timeline = new Timeline(new KeyFrame(Duration.seconds(0.25), e -> updateBoard()));
+        timeline = new Timeline(new KeyFrame(Duration.seconds(0.3), e -> updateBoard()));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
+
         //configure this such that you start a new game when the user hits the newButton
         //Make sure to return the focus to the borderPane once you're done!
+        //if silentstate is false, set the current state to normalLevelState
+        //if mc.s is false, turn on the music
+        //if mc.s is true, turn off the music.
+        //set the speed to the normal speed.
         newButton.setOnAction(e -> {
-            mc.current = new state.NormalLevelState();
-            if(!mc.s){
-                mc.s = true;
-                transState();
-            }else{
-                mc.sound.stop();
-                transState();
+            if(!silentstate) {
+                mc.current = new state.NormalLevelState();
+                if (!mc.s) {
+                    mc.s = true;
+                    transState();
+                } else {
+                    mc.sound.stop();
+                    transState();
+                }
+                this.state = true;
             }
-            this.state = true;
-            model.newGame();
+            double val = slider.getValue();
+            timeline.setRate(val * 3 / 100);
+
+           model.newGame();
         });
 
         //configure this such that you restart the game when the user hits the startButton
         //Make sure to return the focus to the borderPane once you're done!
+        //if silentstate is false and the mc.s is false,
+        //play the music and set mc.s is true.
         startButton.setOnAction(e -> {
-            if(!mc.s){
-                mc.s = true;
-                transState();
+            if(!silentstate){
+                if(!mc.s){
+                    mc.s = true;
+                    transState();
+                }
             }
             model.resume();
         });
 
         //configure this such that you pause the game when the user hits the stopButton
         //Make sure to return the focus to the borderPane once you're done!
+        //if the silentstate is false, set the mc.s is false,
+        //and trun off the music.
         stopButton.setOnAction(e -> {
-            mc.s = false;
-            transState();
+            if(!silentstate) {
+                mc.s = false;
+                transState();
+            }
             model.stopGame();
         });
 
@@ -349,6 +327,31 @@ public class TetrisView implements Initializable {
         //Make sure to return the focus to the borderPane once you're done!
         loadButton.setOnAction(e -> {
             createLoadView();
+        });
+        //if the backgroundButton is selected, the slientstate is true,
+        // and the background sound will be turned off.
+        //if the backgroundButton is unselected,
+        // the silentstate is false,
+        // the background sound will be turned on.
+        backgroundButton.setOnAction(e -> {
+            if(backgroundButton.isSelected()){
+                silentstate = true;
+                mc.s = false;
+                transState();
+            }else {
+                silentstate = false;
+                mc.s = true;
+                transState();
+            }
+        });
+        //if the soundeffectButton is selected, the sound effect will be turned off,
+        //if the soundeffectButton is unselected, the sound effect sound will be turned on.
+        soundeffectButton.setOnAction(e -> {
+            if(soundeffectButton.isSelected()) {
+                model.det = false;
+            }else{
+                model.det = true;
+            }
         });
 
         Left_movement.setOnAction(e -> {
@@ -364,6 +367,8 @@ public class TetrisView implements Initializable {
         Rotate_movement.setOnAction(e -> {
             model.modelTick(TetrisModel.MoveType.ROTATE);
         });
+
+
         //configure this such that you adjust the speed of the timeline to a value that
         //ranges between 0 and 3 times the default rate per model tick.  Make sure to return the
         //focus to the borderPane once you're done!
@@ -385,7 +390,7 @@ public class TetrisView implements Initializable {
                 case R -> model.modelTick(TetrisModel.MoveType.ROTATE);
             }
         });
-
+        //play the sound
         transState();
         this.model.startGame(); //begin
     }
