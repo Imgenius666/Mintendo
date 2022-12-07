@@ -65,7 +65,9 @@ public class LoginController{
             }
         }
     }
-
+    /*
+    If there is a mismatch between the password stored and the user's password, alert the user.
+     */
     private void PasswordMismatchAlert(){
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Password mismatch");
@@ -78,6 +80,9 @@ public class LoginController{
             }
         }
     }
+    /*
+    Opens the register page.
+     */
     @FXML
     public void OpenRegisterPage(ActionEvent event){
         try{
@@ -96,13 +101,18 @@ public class LoginController{
             e.printStackTrace();
         }
     }
-
+    /*
+        Space for checking the username(probably email address, will be implemented later).
+    */
     public void checkLegal(){
         String user_name = UsernameField.getText();
         String user_password = PasswordField.getText();
         CheckUsernameAndPassword(user_name, user_password);
     }
 
+    /*
+      Function that checks the username and password input by the user.
+    */
     private void CheckUsernameAndPassword(String username, String user_password){
         try{
             String paths = "assets/LoginFiles/UserInformation";

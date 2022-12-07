@@ -56,6 +56,7 @@ public class RegisterController implements Initializable {
         }
         return hexString.toString();
     }
+
     public void UsernameEmptyAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Empty Username");
@@ -127,7 +128,9 @@ public class RegisterController implements Initializable {
             }
         }
     }
-
+    /*
+    Checks whether the username and the password is legal.
+     */
     @FXML
     public void RegisterUser() {
         String username = UsernameField.getText();
@@ -150,7 +153,9 @@ public class RegisterController implements Initializable {
             }
         }
     }
-
+    /*
+    Opens the file and writes the encrypted username and password into it, each user on a line, separated by lines.
+     */
     public void SetUser(String username, String password) {
         try{
             String paths = "assets/LoginFiles/UserInformation";
