@@ -38,6 +38,7 @@ public class TetrisModel implements Serializable {
     public Sound2 soundeffect;
 
     public boolean det;//determine whether the soundeffect play or not
+    private String username; // This is the current player's username.
 
     public enum MoveType {
         ROTATE,
@@ -45,6 +46,10 @@ public class TetrisModel implements Serializable {
         RIGHT,
         DROP,
         DOWN
+    }
+    // Sets the current username.
+    public void SetUser(String username) { //start game
+        this.username = username;
     }
 
     /**
@@ -103,32 +108,30 @@ public class TetrisModel implements Serializable {
 
         // Make changes based on the verb
         switch (verb) {
-            case LEFT: newX--; break; //move left
+            case LEFT -> newX--;
+            //move left
 
-            case RIGHT: newX++; break; //move right
+            case RIGHT -> newX++;
+            //move right
 
-            case ROTATE: //rotate
+            case ROTATE -> { //rotate
                 newPiece = newPiece.fastRotation();
-                newX = newX + (currentPiece.getWidth() - newPiece.getWidth())/2;
-                newY = newY + (currentPiece.getHeight() - newPiece.getHeight())/2;
-                break;
-
-            case DOWN: //down
-                newY--;
-                break;
-
-            case DROP: //drop
-                if(det){
+                newX = newX + (currentPiece.getWidth() - newPiece.getWidth()) / 2;
+                newY = newY + (currentPiece.getHeight() - newPiece.getHeight()) / 2;
+            }
+            case DOWN -> //down
+                    newY--;
+            case DROP -> { //drop
+                if (det) {
                     playSE(0);
                 }
                 newY = board.placementHeight(newPiece, newX);
                 if (newY > currentY) { //piece can't move up!
                     newY = currentY;
                 }
-                break;
-
-            default: //doh!
-                throw new RuntimeException("Bad movement!");
+            }
+            default -> //doh!
+                    throw new RuntimeException("Bad movement!");
         }
 
     }
@@ -311,42 +314,43 @@ public class TetrisModel implements Serializable {
                 }
                 // scores go up by 5, 10, 20, 40 as more rows are cleared
                 switch (cleared) {
-                    case 1:
+                    case 1 -> {
                         score += 5;
-                        if(det){
-                            playSE(3);
+                        if (det) {
+                            playSE(2);
                         }
-                        break;
-                    case 2:
+                    }
+                    case 2 -> {
                         score += 10;
-                        if(det){
-                            playSE(4);
+                        if (det) {
+                            playSE(0);
                         }
-                        break;
-                    case 3:
+                    }
+                    case 3 -> {
                         score += 20;
-                        if(det){
-                            playSE(4);
+                        if (det) {
+                            playSE(0);
                         }
-                        break;
-                    case 4:
+                    }
+                    case 4 -> {
                         score += 40;
-                        if(det) {
+                        if (det) {
                             playSE(5);
                         }
-                        break;
-                    default:
+                    }
+                    default -> {
                         score += 50;
-                        if(det) {
+                        if (det) {
                             playSE(5);
                         }
+                    }
                 }
             }
 
             // if the board is too tall, we've lost!
             if (board.getMaxHeight() > board.getHeight() - BUFFERZONE) {
                 if(det) {
-                    playSE(7);
+                    playSE(1);
                 }
                 stopGame();
             }
@@ -398,9 +402,9 @@ public class TetrisModel implements Serializable {
         return this.autoPilotMode;
     }
 
-    //play the soundeffect.
+    //play the soundeffect by the method.
     public void playSE(int i){
-        soundeffect.setFile(i);
+        soundeffect.setEffectsFile(i);
         soundeffect.play();
     }
 }

@@ -2,8 +2,6 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import model.TetrisModel;
-import views.TetrisView;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -14,7 +12,6 @@ import javafx.stage.Stage;
  * Based on the Tetris assignment in the Nifty Assignments Database, authored by Nick Parlante
  */
 public class TetrisApp extends Application {
-    TetrisModel model;
 
     /** 
      * Main method
@@ -33,9 +30,8 @@ public class TetrisApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         try{
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/Tetris_View.fxml"));
-            primaryStage.setTitle("CSC207 Tetris");
-            this.model = new TetrisModel(); // create a model
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("LoginAndRegister/LoginPage.fxml"));
+            primaryStage.setTitle("Login");
             Parent root = loader.load();
             Scene scene = new Scene(root);
             primaryStage.setScene(scene);
@@ -44,6 +40,7 @@ public class TetrisApp extends Application {
                 System.exit(0);
             });
             primaryStage.show();
+
         }catch(Exception e){
             e.printStackTrace();
         }
