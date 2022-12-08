@@ -2,11 +2,15 @@ import model.TetrisPiece;
 import model.TetrisBoard;
 
 import org.junit.jupiter.api.Test;
+
+import java.util.Random;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TetrisTests {
 
     //Piece tests
+    protected  int number;
     @Test
     void testPiece() {
 
@@ -104,6 +108,15 @@ public class TetrisTests {
         int rcleared = board.clearRows();
         assertEquals(2, rcleared);
     }
-
+    @Test
+    void testSecondBoard(){
+        TetrisPiece[] pieces = TetrisPiece.getPieces();
+        Random random = new Random();
+        int secondPieceNum = (int) (pieces.length * random.nextDouble());
+        TetrisPiece piece = pieces[number];
+        TetrisPiece secondPiece = pieces[secondPieceNum];
+        this.number = secondPieceNum;
+        assertEquals(secondPiece, pieces[number]);
+    }
 
 }
