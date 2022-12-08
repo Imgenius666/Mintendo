@@ -223,6 +223,8 @@ public class TetrisModel implements Serializable {
         return HEIGHT + BUFFERZONE;
     }
 
+
+
     /**
      * Get width
      * 
@@ -231,6 +233,7 @@ public class TetrisModel implements Serializable {
     public int getScore() {
         return score;
     }
+
 
     /**
      * Get width
