@@ -2,6 +2,7 @@ package views;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import instruction.InstructionController;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -26,6 +27,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import model.TetrisPiece;
+import org.w3c.dom.Text;
 
 import javax.imageio.ImageIO;
 import java.io.File;
@@ -190,7 +192,7 @@ public class TetrisView implements Initializable {
         if (!this.paused) {
             scoreLabel.setText("Score is: " + model.getScore() + "\nPieces placed:" + model.getCount());
         }
-        if (!this.paused && model.getScore() >= 30) {
+        if (!this.paused && model.getScore() >= 15) {
             if (state) {
                 mc.DetermineState();
                 state = false;
@@ -333,8 +335,9 @@ public class TetrisView implements Initializable {
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.setOnCloseRequest(event -> {
-                Platform.exit();
-                System.exit(0);
+                this.mc.s = true;
+                transState();
+                this.model.resume();
             });
             stage.show();
             ChangeThemeController controller = loader.getController();
@@ -343,6 +346,29 @@ public class TetrisView implements Initializable {
             e.printStackTrace();
         }
     }
+    @FXML
+    private void openInstruction(){
+        this.model.stopGame();
+        try{
+            this.mc.s = false;
+            transState();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/instruction/instruction.fxml"));
+            Stage stage = new Stage();
+            stage.setTitle("Instuctions");
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.show();
+            stage.setOnCloseRequest(event -> {
+                this.mc.s = true;
+                transState();
+                this.model.resume();
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
 
     @Override
@@ -462,9 +488,7 @@ public class TetrisView implements Initializable {
         changeColorModebutton.setOnAction(e -> {
             changeColorMode();
         });
-        TextInstructionButton.setOnAction(e -> {
-            gameInstruction();
-        });
+
 
         CustomizeColorButton.setOnAction(e -> {
             customizeColor();
@@ -517,7 +541,7 @@ public class TetrisView implements Initializable {
     }
 
     private void gameInstruction(){
-        TextInstruction gameInstruction = new TextInstruction(this);
+        //
     }
 
     public double getWidth(){return this.width;}

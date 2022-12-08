@@ -27,13 +27,14 @@ public class Sound {
     //  Input Stream
     AudioInputStream audioInputStream;
     // file path
-    static String filePath;
+    static String filePath = "./assets/sounds/introaudio/IntroAudio.wav";
     public Sound()
             throws UnsupportedAudioFileException,
             IOException, LineUnavailableException
     {
+        File instruction_sound = new File(filePath);
         audioInputStream =
-                AudioSystem.getAudioInputStream(new File(filePath).getAbsoluteFile());
+                AudioSystem.getAudioInputStream(instruction_sound.toURI().toURL());
         // open input stream in the clip
         clip = AudioSystem.getClip();
         clip.open(audioInputStream);
@@ -45,7 +46,7 @@ public class Sound {
     {
         try
         {
-            filePath = "./soundfile/IntroAudio.wav";
+
             Sound audioPlayer = new Sound();
             audioPlayer.play();
             Scanner sc = new Scanner(System.in);
@@ -75,20 +76,11 @@ public class Sound {
     private void gotoChoice(int c)
             throws IOException, LineUnavailableException, UnsupportedAudioFileException
     {
-        switch (c)
-        {
-            case 1:
-                pause();
-                break;
-            case 2:
-                resumeAudio();
-                break;
-            case 3:
-                restart();
-                break;
-            case 4:
-                stop();
-                break;
+        switch (c) {
+            case 1 -> pause();
+            case 2 -> resumeAudio();
+            case 3 -> restart();
+            case 4 -> stop();
         }
     }
     // Play the Audio

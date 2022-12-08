@@ -14,38 +14,42 @@ public class InstructionController {
     // sound
     Sound sound;
     // Constructor for Sound
-    public void Sound() throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-        this.sound = new Sound();
 
-    }
     // initialize
     public void initialize(){
-        Start_Audio.setOnAction(e -> {
-            sound.play();
-        });
-        Pause_Audio.setOnAction(e -> {
-            sound.pause();
-        });
-        Restart_Audio.setOnAction(e -> {
-            try {
-                sound.restart();
-            } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        Resume_Audio.setOnAction(e -> {
-            try {
-                sound.resumeAudio();
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
-        Stop_Audio.setOnAction(e -> {
-            try {
-                sound.stop();
-            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
-                throw new RuntimeException(ex);
-            }
-        });
+        try {
+            this.sound = new Sound();
+            Start_Audio.setOnAction(e -> {
+                sound.play();
+            });
+            Pause_Audio.setOnAction(e -> {
+                sound.pause();
+            });
+            Restart_Audio.setOnAction(e -> {
+                try {
+                    sound.restart();
+                } catch (IOException | LineUnavailableException | UnsupportedAudioFileException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            Resume_Audio.setOnAction(e -> {
+                try {
+                    sound.resumeAudio();
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+            Stop_Audio.setOnAction(e -> {
+                try {
+                    sound.stop();
+                } catch (UnsupportedAudioFileException | IOException | LineUnavailableException ex) {
+                    throw new RuntimeException(ex);
+                }
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
+
+   // public void
 }

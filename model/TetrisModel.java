@@ -123,7 +123,7 @@ public class TetrisModel implements Serializable {
                     newY--;
             case DROP -> { //drop
                 if (det) {
-                    playSE(0);
+                    playSE(3);
                 }
                 newY = board.placementHeight(newPiece, newX);
                 if (newY > currentY) { //piece can't move up!
@@ -310,7 +310,7 @@ public class TetrisModel implements Serializable {
             int cleared = board.clearRows();
             if (cleared > 0) {
                 if(det) {
-                    playSE(1);
+                    playSE(4);
                 }
                 // scores go up by 5, 10, 20, 40 as more rows are cleared
                 switch (cleared) {
