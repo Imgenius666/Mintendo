@@ -234,6 +234,7 @@ public class TetrisModel implements Serializable {
         return score;
     }
 
+
     /**
      * Get width
      * 
